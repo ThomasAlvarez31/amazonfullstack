@@ -1,6 +1,13 @@
 # amazonfullstack
 
 Recreacion de Amazon para asignatura fullstack 3
+Servicio       Puerto
+MS-Auth        8081
+MS-Users
+MS-Products
+MS-Orders
+MS-Inventory
+MS-Payments
 
 # Ejecucion
 Ejecucion MS-Auth
