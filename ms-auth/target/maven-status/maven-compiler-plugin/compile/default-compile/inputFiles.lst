@@ -1,7 +1,7 @@
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/controller/AuthController.java
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/AuthApplication.java
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/model/User.java
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/security/SecurityConfig.java
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/service/AuthService.java
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/security/JwtService.java
-/mnt/c/Users/thoma/Desktop/msamazon/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/repository/UserRepository.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/controller/AuthController.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/model/User.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/AuthApplication.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/security/SecurityConfig.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/service/AuthService.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/repository/UserRepository.java
+/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-auth/src/main/java/com/ecommerce/auth/security/JwtService.java
