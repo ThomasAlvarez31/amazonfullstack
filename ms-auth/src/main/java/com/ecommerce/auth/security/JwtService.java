@@ -2,20 +2,27 @@ package com.ecommerce.auth.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Service
 public class JwtService {
 
-    private String SECRET = "supersecretkey";
+    // Esta clave tiene más de 32 caracteres para cumplir con el estándar HS256
+    private final String SECRET = "esta_es_una_clave_secreta_muy_larga_y_segura_para_ecommerce_2026";
 
-    public String generateToken(String email){
+    public String generateToken(String email) {
+        SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 }

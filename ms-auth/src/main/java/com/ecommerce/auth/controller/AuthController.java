@@ -1,5 +1,7 @@
 package com.ecommerce.auth.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.ecommerce.auth.model.User;
 import com.ecommerce.auth.service.AuthService;
@@ -16,13 +18,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody User user){
-
         return authService.register(user);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user){
-
-        return authService.login(user.getEmail(), user.getPassword());
+    public ResponseEntity<?> login(@RequestBody User user){
+        try {
+            String token = authService.login(user.getEmail(), user.getPassword());
+            return ResponseEntity.ok(token);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 }

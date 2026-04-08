@@ -1,5 +1,6 @@
-/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/UsersApplication.java
-/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/repository/UserRepository.java
-/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/controller/UserController.java
-/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/service/UserService.java
-/mnt/c/Users/thoma/Desktop/proyecto1/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/model/User.java
+/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/model/User.java
+/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/UsersApplication.java
+/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/controller/UserController.java
+/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/repository/UserRepository.java
+/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/config/SecurityConfig.java
+/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/service/UserService.java

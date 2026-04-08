@@ -1,5 +1,7 @@
 package com.ecommerce.users.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +13,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String username;
+    private String username;    
     private String email;
-    private String password; //debe ir encriptada
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 }
