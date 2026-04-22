@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productos — Amazon.cl</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <div class="container">
+    <div class="products-layout">
+
+      <aside class="filters">
+        <h3>Filtrar por</h3>
+
+        <h4>Categoría</h4>
+        <label><input type="checkbox" checked> Todos</label>
+        <label><input type="checkbox"> Electrónica</label>
+        <label><input type="checkbox"> Ropa</label>
+        <label><input type="checkbox"> Hogar</label>
+        <label><input type="checkbox"> Libros</label>
+
+        <h4>Precio máximo</h4>
+        <div class="price-range">
+          <input type="range" id="price-range" min="0" max="1000000" step="10000" value="1000000" />
+          <span id="price-label">Hasta $1.000.000</span>
+        </div>
+
+        <h4>Valoración</h4>
+        <label><input type="radio" name="rating" checked> Todas</label>
+        <label><input type="radio" name="rating"> ★★★★★</label>
+        <label><input type="radio" name="rating"> ★★★★☆ y más</label>
+
+        <h4>Envío</h4>
+        <label><input type="checkbox"> Prime gratis</label>
+        <label><input type="checkbox"> En 1 día</label>
+      </aside>
+
+      <main>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2 class="section-title" id="page-title" style="margin:0">Todos los productos</h2>
+          <span id="result-count" style="color:#555;font-size:13px"></span>
+        </div>
+        <div class="products-grid" id="products-grid"></div>
+      </main>
+
+    </div>
+  </div>
+
+  <div id="footer"></div>
+
+  <script type="module" src="js/products.js"></script>
+</body>
+</html>
