@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  ms-auth:
+    build: ./ms-auth
+    container_name: ms-auth
+    ports:
+      - "9000:9000"
+
+  ms-users:
+    build: ./ms-users
+    container_name: ms-users
+    ports:
+      - "8082:8082"
+
+  ms-inventory:
+    build: ./ms-inventory
+    container_name: ms-inventory
+    ports:
+      - "8083:8083"
+
+  ms-orders:
+    build: ./ms-orders
+    container_name: ms-orders
+    ports:
+      - "8084:8084"
+
+  ms-products:
+    build: ./ms-products
+    container_name: ms-products
+    ports:
+      - "8085:8085"
+
+  ms-payments:
+    build: ./ms-payments
+    container_name: ms-payments
+    ports:
+      - "8086:8086"
+
+  ms-cart:
+    build: ./ms-cart
+    container_name: ms-cart
+    ports:
+      - "8087:8087"
+
+  ms-shipping:
+    build: ./ms-shipping
+    container_name: ms-shipping
+    ports:
+      - "8088:8088"
+
+  ms-notifications:
+    build: ./ms-notifications
+    container_name: ms-notifications
+    depends_on:
+      - kafka
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  ms-reviews:
+    build: ./ms-reviews
+    container_name: ms-reviews
+    ports:
+      - "8090:8090"
+
+  ms-search:
+    build: ./ms-search
+    container_name: ms-search
+    ports:
+      - "8091:8091"
+
+  ms-wishlist:
+    build: ./ms-wishlist
+    container_name: ms-wishlist
+    ports:
+      - "8092:8092"
