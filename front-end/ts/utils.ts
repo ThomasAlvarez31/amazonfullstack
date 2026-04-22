@@ -1,0 +1,121 @@
+import { cartApi } from './api.js'
+
+export function renderNavbar(el: HTMLElement): void {
+  const username = localStorage.getItem('username') ?? 'Identifícate'
+  const userId   = Number(localStorage.getItem('userId') ?? 1)
+
+  el.innerHTML = `
+    <nav class="navbar">
+      <a class="navbar__logo" href="/index.html">
+        <span>amazon<em>.cl</em></span>
+      </a>
+      <div class="navbar__location">
+        <span>Entregar a</span>
+        <span>📍 Chile</span>
+      </div>
+      <div class="navbar__search">
+        <select>
+          <option>Todo</option>
+          <option>Electrónica</option>
+          <option>Ropa</option>
+          <option>Libros</option>
+          <option>Hogar</option>
+        </select>
+        <input id="nav-search" type="text" placeholder="Buscar en Amazon.cl" />
+        <button id="nav-search-btn">🔍</button>
+      </div>
+      <div class="navbar__account" id="nav-account">
+        <span>Hola, ${username}</span>
+        <span>${localStorage.getItem('token') ? 'Cerrar sesión ▾' : 'Cuenta y listas ▾'}</span>
+      </div>
+      <a class="navbar__cart" href="/cart.html">
+        <div class="navbar__cart__icon" style="position:relative">
+          🛒<span class="navbar__cart__count" id="cart-count">0</span>
+        </div>
+        <span>Carrito</span>
+      </a>
+    </nav>
+    <nav class="subnav">
+      <a class="subnav__menu" href="#">☰ Todas las categorías</a>
+      <a href="#">Ofertas del día</a>
+      <a href="/products.html">Productos</a>
+      <a href="#">Electrónica</a>
+      <a href="#">Ropa</a>
+      <a href="#">Hogar</a>
+      <a href="#">Libros</a>
+      <a href="#">Juguetes</a>
+    </nav>
+  `
+
+  document.getElementById('nav-search-btn')?.addEventListener('click', () => {
+    const q = (document.getElementById('nav-search') as HTMLInputElement).value.trim()
+    if (q) window.location.href = `/products.html?q=${encodeURIComponent(q)}`
+  })
+
+  document.getElementById('nav-search')?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter') document.getElementById('nav-search-btn')?.click()
+  })
+
+  document.getElementById('nav-account')?.addEventListener('click', () => {
+    if (localStorage.getItem('token')) { localStorage.clear(); window.location.reload() }
+    else window.location.href = '/login.html'
+  })
+
+  cartApi.getCart(userId).then(items => {
+    const n = items.reduce((s, i) => s + i.quantity, 0)
+    const el = document.getElementById('cart-count')
+    if (el) el.textContent = String(n)
+  }).catch(() => {})
+}
+
+export function renderFooter(el: HTMLElement): void {
+  el.innerHTML = `
+    <div class="footer-back" onclick="window.scrollTo({top:0,behavior:'smooth'})">Volver al principio</div>
+    <div class="footer-main">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Conócenos</h4>
+          <a href="#">Carreras</a>
+          <a href="#">Blog</a>
+          <a href="#">Acerca de</a>
+        </div>
+        <div class="footer-col">
+          <h4>Gana dinero</h4>
+          <a href="#">Vende en Amazon</a>
+          <a href="#">Afiliados</a>
+        </div>
+        <div class="footer-col">
+          <h4>Pagos</h4>
+          <a href="#">Tarjeta de crédito</a>
+          <a href="#">WebPay</a>
+        </div>
+        <div class="footer-col">
+          <h4>Ayuda</h4>
+          <a href="#">Rastrear pedido</a>
+          <a href="#">Devoluciones</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <strong>amazon<em>.cl</em></strong>
+      <p style="margin-top:8px">© 2025 — Recreación académica</p>
+    </div>
+  `
+}
+
+export function showToast(msg: string): void {
+  let toast = document.getElementById('toast')
+  if (!toast) {
+    toast = document.createElement('div')
+    toast.id = 'toast'
+    toast.className = 'toast'
+    document.body.appendChild(toast)
+  }
+  toast.textContent = msg
+  toast.classList.add('show')
+  setTimeout(() => toast!.classList.remove('show'), 2800)
+}
+
+export function stars(n: number): string {
+  return '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n))
+}
