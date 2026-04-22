@@ -1,7 +1,10 @@
 package com.ejemplo.productservice.controller;
 
 import com.ejemplo.productservice.model.Product;
-import com.ejemplo.productservice.repository.ProductRepository;
+import com.ejemplo.productservice.service.ProductService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,19 +13,19 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductRepository repository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository repository) {
-        this.repository = repository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
     public List<Product> getAllProducts() {
-        return repository.findAll();
+        return productService.findAll();
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return repository.save(product);
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
 }

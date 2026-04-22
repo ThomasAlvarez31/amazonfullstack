@@ -1,6 +1,6 @@
-/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/model/User.java
-/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/UsersApplication.java
-/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/controller/UserController.java
-/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/repository/UserRepository.java
-/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/config/SecurityConfig.java
-/home/tomy/Documents/amazonfullstack/ms-users/src/main/java/com/ecommerce/users/service/UserService.java
+C:\Users\ISMA\Desktop\otros\Amazon fullstack III\amazonfullstack\ms-users\src\main\java\com\ecommerce\users\UsersApplication.java
+C:\Users\ISMA\Desktop\otros\Amazon fullstack III\amazonfullstack\ms-users\src\main\java\com\ecommerce\users\controller\UserController.java
+C:\Users\ISMA\Desktop\otros\Amazon fullstack III\amazonfullstack\ms-users\src\main\java\com\ecommerce\users\model\User.java
+C:\Users\ISMA\Desktop\otros\Amazon fullstack III\amazonfullstack\ms-users\src\main\java\com\ecommerce\users\repository\UserRepository.java
+C:\Users\ISMA\Desktop\otros\Amazon fullstack III\amazonfullstack\ms-users\src\main\java\com\ecommerce\users\config\SecurityConfig.java
+C:\Users\ISMA\Desktop\otros\Amazon fullstack III\amazonfullstack\ms-users\src\main\java\com\ecommerce\users\service\UserService.java
