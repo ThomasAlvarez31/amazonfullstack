@@ -1,13 +1,4 @@
-const BASE = {
-    auth: 'http://localhost:9000',
-    users: 'http://localhost:8082',
-    products: 'http://localhost:8085',
-    cart: 'http://localhost:8087',
-    orders: 'http://localhost:8084',
-    reviews: 'http://localhost:8090',
-    search: 'http://localhost:8091',
-    wishlist: 'http://localhost:8092',
-};
+const BASE = 'http://localhost:8080';
 function headers() {
     const token = localStorage.getItem('token');
     return {
@@ -31,31 +22,31 @@ async function del(url) {
     await fetch(url, { method: 'DELETE', headers: headers() });
 }
 export const authApi = {
-    login: (email, password) => post(`${BASE.auth}/api/auth/login`, { email, password }),
-    register: (username, email, password) => post(`${BASE.auth}/api/auth/register`, { username, email, password }),
+    login: (email, password) => post(`${BASE}/api/auth/login`, { email, password }),
+    register: (username, email, password) => post(`${BASE}/api/auth/register`, { username, email, password }),
 };
 export const productsApi = {
-    getAll: () => get(`${BASE.products}/api/products`),
-    getById: (id) => get(`${BASE.products}/api/products/${id}`),
+    getAll: () => get(`${BASE}/api/products`),
+    getById: (id) => get(`${BASE}/api/products/${id}`),
 };
 export const cartApi = {
-    getCart: (userId) => get(`${BASE.cart}/api/cart/${userId}`),
-    addItem: (item) => post(`${BASE.cart}/api/cart`, item),
-    removeItem: (id) => del(`${BASE.cart}/api/cart/${id}`),
-    clearCart: (userId) => del(`${BASE.cart}/api/cart/clear/${userId}`),
+    getCart: (userId) => get(`${BASE}/api/cart/${userId}`),
+    addItem: (item) => post(`${BASE}/api/cart`, item),
+    removeItem: (id) => del(`${BASE}/api/cart/${id}`),
+    clearCart: (userId) => del(`${BASE}/api/cart/clear/${userId}`),
 };
 export const ordersApi = {
-    create: (order) => post(`${BASE.orders}/api/orders`, order),
+    create: (order) => post(`${BASE}/api/orders`, order),
 };
 export const reviewsApi = {
-    getByProduct: (productId) => get(`${BASE.reviews}/api/reviews/product/${productId}`),
-    create: (review) => post(`${BASE.reviews}/api/reviews`, review),
+    getByProduct: (productId) => get(`${BASE}/api/reviews/product/${productId}`),
+    create: (review) => post(`${BASE}/api/reviews`, review),
 };
 export const searchApi = {
-    search: (keyword) => get(`${BASE.search}/api/search?keyword=${encodeURIComponent(keyword)}`),
+    search: (keyword) => get(`${BASE}/api/search?keyword=${encodeURIComponent(keyword)}`),
 };
 export const wishlistApi = {
-    get: (userId) => get(`${BASE.wishlist}/api/wishlist/${userId}`),
-    add: (item) => post(`${BASE.wishlist}/api/wishlist`, item),
-    remove: (id) => del(`${BASE.wishlist}/api/wishlist/${id}`),
+    get: (userId) => get(`${BASE}/api/wishlist/${userId}`),
+    add: (item) => post(`${BASE}/api/wishlist`, item),
+    remove: (id) => del(`${BASE}/api/wishlist/${id}`),
 };

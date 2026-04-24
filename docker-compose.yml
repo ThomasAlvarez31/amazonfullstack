@@ -97,3 +97,22 @@ services:
     container_name: ms-wishlist
     ports:
       - "8092:8092"
+
+  ms-gateway:
+    build: ./ms-gateway
+    container_name: ms-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ms-auth
+      - ms-users
+      - ms-products
+      - ms-cart
+      - ms-orders
+      - ms-inventory
+      - ms-payments
+      - ms-shipping
+      - ms-notifications
+      - ms-reviews
+      - ms-search
+      - ms-wishlist
