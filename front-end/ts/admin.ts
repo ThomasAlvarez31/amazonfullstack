@@ -1,5 +1,9 @@
 import { renderNavbar, renderFooter } from './utils.js'
 
+if (localStorage.getItem('role') !== 'ADMIN') {
+  window.location.href = '/login.html'
+}
+
 renderNavbar(document.getElementById('navbar')!)
 renderFooter(document.getElementById('footer')!)
 

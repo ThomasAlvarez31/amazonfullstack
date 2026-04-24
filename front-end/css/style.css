@@ -113,6 +113,17 @@ button { cursor: pointer; font-family: inherit; }
   padding: 0 4px;
 }
 
+.navbar__admin {
+  background: #ff9900;
+  color: #0f1111;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.navbar__admin:hover { background: #f3a847; }
+
 /* ── Subnav ───────────────────────────────────────────────── */
 .subnav {
   display: flex;

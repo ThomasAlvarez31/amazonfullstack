@@ -6,6 +6,8 @@ import com.ecommerce.auth.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class AuthService {
 
@@ -14,23 +16,29 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
+        this.userRepository  = userRepository;
+        this.jwtService      = jwtService;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String register(User user) {
+    public Map<String, String> register(User user) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("El correo ya esta registrado");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
         userRepository.save(user);
-        return jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), "USER");
+        return Map.of("token", token, "role", "USER");
     }
 
-    public String login(String email, String password) {
+    public Map<String, String> login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return jwtService.generateToken(user.getEmail());
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Credenciales invalidas");
         }
-        throw new RuntimeException("Credenciales invalidas");
+        String token = jwtService.generateToken(user.getEmail(), user.getRole());
+        return Map.of("token", token, "role", user.getRole());
     }
 }

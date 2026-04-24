@@ -1,7 +1,10 @@
 package com.ecommerce.auth.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import com.ecommerce.auth.model.User;
 import com.ecommerce.auth.service.AuthService;
@@ -19,22 +22,29 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@Valid @RequestBody User user) {
         try {
-            String token = authService.register(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("token", token));
+            return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(user));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         try {
-            String token = authService.login(user.getEmail(), user.getPassword());
-            return ResponseEntity.ok(Map.of("token", token));
+            return ResponseEntity.ok(authService.login(user.getEmail(), user.getPassword()));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+        String msg = ex.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage)
+                .findFirst()
+                .orElse("Datos invalidos");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", msg));
     }
 }

@@ -47,4 +47,5 @@ export interface WishlistItem {
 
 export interface AuthResponse {
   token: string
+  role: string
 }

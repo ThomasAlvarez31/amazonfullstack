@@ -30,6 +30,7 @@ export function renderNavbar(el) {
         <span class="navbar__cart__label">Carrito</span>
         <span class="navbar__cart__count" id="cart-count">0</span>
       </a>
+      ${localStorage.getItem('role') === 'ADMIN' ? '<a class="navbar__admin" href="/admin.html">Admin</a>' : ''}
     </nav>
     <nav class="subnav">
       <a class="subnav__menu" href="#">&#9776; Todas las categorias</a>
