@@ -4,12 +4,13 @@ Recreacion de Amazon para asignatura fullstack 3 realizado con las tecnologias d
 
 | Servicio      | Puerto |
 |---------------|--------|
-| MS-Auth       | 8081   |
-| MS-Users      |  n/a   |
-| MS-Products   |  n/a   |
-| MS-Orders     |  n/a   |
-| MS-Inventory  |  n/a   |
-| MS-Payments   |  n/a   |
+| MS-Auth       | 9000   |
+| MS-Users      | 8082   |
+| MS-Inventory  | 8083   |
+| MS-Orders     | 8084   |
+| MS-Products   | 8085   |
+| MS-Payments   | 8086   |
+| MS-Cart       | 8087   |
 
 
 # Ejecucion
