@@ -1,6 +1,6 @@
 import { cartApi } from './api.js';
 export function renderNavbar(el) {
-    const username = localStorage.getItem('username') ?? 'Identifícate';
+    const username = localStorage.getItem('username') ?? 'Identificate';
     const userId = Number(localStorage.getItem('userId') ?? 1);
     el.innerHTML = `
     <nav class="navbar">
@@ -9,35 +9,33 @@ export function renderNavbar(el) {
       </a>
       <div class="navbar__location">
         <span>Entregar a</span>
-        <span>📍 Chile</span>
+        <span>Chile</span>
       </div>
       <div class="navbar__search">
         <select>
           <option>Todo</option>
-          <option>Electrónica</option>
+          <option>Electronica</option>
           <option>Ropa</option>
           <option>Libros</option>
           <option>Hogar</option>
         </select>
         <input id="nav-search" type="text" placeholder="Buscar en Amazon.cl" />
-        <button id="nav-search-btn">🔍</button>
+        <button id="nav-search-btn">Buscar</button>
       </div>
       <div class="navbar__account" id="nav-account">
         <span>Hola, ${username}</span>
-        <span>${localStorage.getItem('token') ? 'Cerrar sesión ▾' : 'Cuenta y listas ▾'}</span>
+        <span>${localStorage.getItem('token') ? 'Cerrar sesion' : 'Cuenta y listas'}</span>
       </div>
       <a class="navbar__cart" href="/cart.html">
-        <div class="navbar__cart__icon" style="position:relative">
-          🛒<span class="navbar__cart__count" id="cart-count">0</span>
-        </div>
-        <span>Carrito</span>
+        <span class="navbar__cart__label">Carrito</span>
+        <span class="navbar__cart__count" id="cart-count">0</span>
       </a>
     </nav>
     <nav class="subnav">
-      <a class="subnav__menu" href="#">☰ Todas las categorías</a>
-      <a href="#">Ofertas del día</a>
+      <a class="subnav__menu" href="#">&#9776; Todas las categorias</a>
+      <a href="#">Ofertas del dia</a>
       <a href="/products.html">Productos</a>
-      <a href="#">Electrónica</a>
+      <a href="#">Electronica</a>
       <a href="#">Ropa</a>
       <a href="#">Hogar</a>
       <a href="#">Libros</a>
@@ -74,7 +72,7 @@ export function renderFooter(el) {
     <div class="footer-main">
       <div class="footer-grid">
         <div class="footer-col">
-          <h4>Conócenos</h4>
+          <h4>Conocenos</h4>
           <a href="#">Carreras</a>
           <a href="#">Blog</a>
           <a href="#">Acerca de</a>
@@ -86,7 +84,7 @@ export function renderFooter(el) {
         </div>
         <div class="footer-col">
           <h4>Pagos</h4>
-          <a href="#">Tarjeta de crédito</a>
+          <a href="#">Tarjeta de credito</a>
           <a href="#">WebPay</a>
         </div>
         <div class="footer-col">
@@ -98,7 +96,7 @@ export function renderFooter(el) {
     </div>
     <div class="footer-bottom">
       <strong>amazon<em>.cl</em></strong>
-      <p style="margin-top:8px">© 2025 — Recreación académica</p>
+      <p style="margin-top:8px">2025 - Recreacion academica</p>
     </div>
   `;
 }
@@ -115,5 +113,5 @@ export function showToast(msg) {
     setTimeout(() => toast.classList.remove('show'), 2800);
 }
 export function stars(n) {
-    return '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+    return '&#9733;'.repeat(Math.round(n)) + '&#9734;'.repeat(5 - Math.round(n));
 }

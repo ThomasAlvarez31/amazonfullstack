@@ -6,26 +6,33 @@ import org.springframework.web.bind.annotation.*;
 import com.ecommerce.auth.model.User;
 import com.ecommerce.auth.service.AuthService;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService){
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody User user){
-        return authService.register(user);
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            String token = authService.register(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("token", token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user){
+    public ResponseEntity<?> login(@RequestBody User user) {
         try {
             String token = authService.login(user.getEmail(), user.getPassword());
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }

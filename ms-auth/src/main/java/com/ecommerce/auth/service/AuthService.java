@@ -3,7 +3,7 @@ package com.ecommerce.auth.service;
 import com.ecommerce.auth.model.User;
 import com.ecommerce.auth.repository.UserRepository;
 import com.ecommerce.auth.security.JwtService;
-import org.springframework.security.crypto.password.PasswordEncoder; // IMPORTANTE
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,20 +19,18 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User register(User user) {
+    public String register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
+        return jwtService.generateToken(user.getEmail());
     }
 
     public String login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        // Usamos matches para comparar texto plano vs hash
         if (passwordEncoder.matches(password, user.getPassword())) {
             return jwtService.generateToken(user.getEmail());
-        } else {
-            throw new RuntimeException("Credenciales inválidas");
         }
+        throw new RuntimeException("Credenciales invalidas");
     }
 }
