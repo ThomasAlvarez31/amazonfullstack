@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,29 +35,46 @@ class AuthServiceTest {
 
     @Test
     void register_deberiaHashearPasswordYGuardarUsuario() {
-        User user = new User("test@mail.com", "123456", "USER");
+        User user = new User("test@mail.com", "123456", null);
 
+        when(userRepository.findByEmail("test@mail.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("123456")).thenReturn("hash_seguro");
         when(userRepository.save(any(User.class))).thenReturn(user);
+        when(jwtService.generateToken(anyString(), anyString())).thenReturn("token.jwt.generado");
 
-        User resultado = authService.register(user);
+        Map<String, String> resultado = authService.register(user);
 
-        assertEquals("hash_seguro", resultado.getPassword());
-        verify(userRepository, times(1)).save(user);
+        assertEquals("token.jwt.generado", resultado.get("token"));
+        assertEquals("USER", resultado.get("role"));
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
-    void login_deberiaRetornarTokenCuandoCredencialesSonCorrectas() {
+    void register_deberiaLanzarExcepcionSiCorreoYaExiste() {
+        User user = new User("test@mail.com", "123456", null);
+
+        when(userRepository.findByEmail("test@mail.com")).thenReturn(Optional.of(user));
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> authService.register(user));
+
+        assertEquals("El correo ya esta registrado", ex.getMessage());
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void login_deberiaRetornarTokenYRolCuandoCredencialesCorrectas() {
         User user = new User("test@mail.com", "hash_seguro", "USER");
 
         when(userRepository.findByEmail("test@mail.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("123456", "hash_seguro")).thenReturn(true);
-        when(jwtService.generateToken("test@mail.com")).thenReturn("token.jwt.generado");
+        when(jwtService.generateToken("test@mail.com", "USER")).thenReturn("token.jwt.generado");
 
-        String token = authService.login("test@mail.com", "123456");
+        Map<String, String> resultado = authService.login("test@mail.com", "123456");
 
-        assertEquals("token.jwt.generado", token);
-        verify(jwtService, times(1)).generateToken("test@mail.com");
+        assertEquals("token.jwt.generado", resultado.get("token"));
+        assertEquals("USER", resultado.get("role"));
+        verify(jwtService, times(1)).generateToken("test@mail.com", "USER");
     }
 
     @Test
@@ -79,6 +97,6 @@ class AuthServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> authService.login("test@mail.com", "incorrecta"));
 
-        assertEquals("Credenciales inválidas", ex.getMessage());
+        assertEquals("Credenciales invalidas", ex.getMessage());
     }
 }
