@@ -3,71 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Iniciar sesión — Amazon.cl</title>
+  <title>Iniciar sesion — Amazon.cl</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body style="background:#fff">
+<body style="background:#eaeded">
 
-  <div style="background:#131921;text-align:center;padding:12px 0;margin-bottom:20px">
+  <div style="background:#131921;text-align:center;padding:12px 0;margin-bottom:24px">
     <a href="index.html" style="color:#fff;font-size:26px;font-weight:800;letter-spacing:-1px">
       amazon<span style="color:#ff9900">.cl</span>
     </a>
   </div>
 
-  <div class="login-page">
-    <div style="display:flex;border-bottom:2px solid #ff9900">
-      <button id="tab-login" style="flex:1;padding:10px;background:#fff;border:1px solid #ddd;border-bottom:none;font-size:14px;font-weight:700;cursor:pointer">
-        Iniciar sesión
-      </button>
-      <button id="tab-register" style="flex:1;padding:10px;background:#f5f5f5;border:1px solid #ddd;border-bottom:none;font-size:14px;cursor:pointer">
-        Crear cuenta
-      </button>
+  <div class="login-wrap">
+    <div class="login-tabs">
+      <button id="tab-login" class="active">Iniciar sesion</button>
+      <button id="tab-register">Crear cuenta</button>
     </div>
 
-    <div class="login-box" style="border-top:none;border-radius:0 0 4px 4px">
+    <div class="login-box">
 
       <div id="section-login">
-        <h1 style="font-size:24px;margin-bottom:20px">Iniciar sesión</h1>
+        <h1>Iniciar sesion</h1>
+        <div class="error-msg" id="error-msg"></div>
         <div class="form-group">
-          <label>Correo electrónico</label>
+          <label>Correo electronico</label>
           <input type="email" id="login-email" placeholder="tucorreo@ejemplo.com" />
         </div>
         <div class="form-group">
-          <label>Contraseña</label>
-          <input type="password" id="login-password" placeholder="Mínimo 6 caracteres" />
+          <label>Contrasena</label>
+          <input type="password" id="login-password" placeholder="Minimo 6 caracteres" />
         </div>
-        <div class="error-msg" id="error-msg"></div>
-        <button class="btn-primary" id="btn-login">Continuar</button>
+        <button class="btn-grad" id="btn-login">Continuar</button>
         <p style="font-size:11px;color:#555;margin-top:12px">
-          Al continuar aceptas las <a href="#" style="color:#007185">Condiciones de uso</a> de Amazon.
+          Al continuar aceptas las <a href="#" style="color:#007185">Condiciones de uso</a>.
         </p>
       </div>
 
       <div id="section-register" style="display:none">
-        <h1 style="font-size:24px;margin-bottom:20px">Crea tu cuenta</h1>
+        <h1>Crea tu cuenta</h1>
+        <div class="error-msg" id="error-msg-reg"></div>
         <div class="form-group">
           <label>Tu nombre</label>
           <input type="text" id="reg-username" placeholder="Nombre y apellido" />
         </div>
         <div class="form-group">
-          <label>Correo electrónico</label>
+          <label>Correo electronico</label>
           <input type="email" id="reg-email" placeholder="tucorreo@ejemplo.com" />
         </div>
         <div class="form-group">
-          <label>Contraseña</label>
-          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" />
+          <label>Contrasena</label>
+          <input type="password" id="reg-password" placeholder="Minimo 6 caracteres" />
         </div>
-        <button class="btn-primary" id="btn-register">Crear tu cuenta Amazon</button>
+        <button class="btn-grad" id="btn-register">Crear cuenta</button>
       </div>
 
     </div>
   </div>
 
-  <div style="border-top:1px solid #ddd;margin-top:32px;padding:16px;text-align:center;font-size:12px;color:#555">
+  <div style="text-align:center;font-size:12px;color:#555;margin-top:20px;padding-bottom:32px">
     <a href="#" style="color:#007185;margin:0 8px">Condiciones de uso</a>
-    <a href="#" style="color:#007185;margin:0 8px">Aviso de privacidad</a>
+    <a href="#" style="color:#007185;margin:0 8px">Privacidad</a>
     <a href="#" style="color:#007185;margin:0 8px">Ayuda</a>
-    <p style="margin-top:8px">© 2025 Amazon.cl — Recreación académica</p>
   </div>
 
   <script type="module" src="js/login.js"></script>
