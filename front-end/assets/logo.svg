@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 48" width="192" height="48">
+  <rect width="192" height="48" fill="#131921" rx="4"></rect>
+  <text x="4" y="36" font-family="Arial, sans-serif" font-size="32" font-weight="800" letter-spacing="-1" fill="#ffffff">amazon</text>
+  <text x="132" y="36" font-family="Arial, sans-serif" font-size="32" font-weight="800" letter-spacing="-1" fill="#ff9900">.cl</text>
+  <path d="M8 42 Q96 54 184 42" stroke="#ff9900" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+</svg>

@@ -8,8 +8,8 @@ export function renderNavbar(el: HTMLElement): void {
 
   el.innerHTML = `
     <nav class="navbar">
-      <button class="navbar__logo" onclick="location.href='/index.html'">
-        amazon<em>.cl</em>
+      <button class="navbar__logo" onclick="location.href='/index.html'" style="background:none;border:none;padding:4px;line-height:0">
+        <img src="/assets/logo.svg" height="36" alt="Amazon.cl" style="display:block" />
       </button>
       <div class="navbar__location">
         <span>Entregar a</span>
@@ -104,8 +104,8 @@ export function renderFooter(el: HTMLElement): void {
       </div>
     </div>
     <div class="footer-bottom">
-      <strong>amazon<em>.cl</em></strong>
-      <p style="margin-top:5px;font-size:11px;color:#777">2025 - Recreacion academica</p>
+      <img src="/assets/logo-dark.svg" height="28" alt="Amazon.cl" style="filter:brightness(0) invert(1);margin-bottom:6px" />
+      <p style="font-size:11px;color:#777">2025 - Recreacion academica</p>
     </div>
   `
 }
