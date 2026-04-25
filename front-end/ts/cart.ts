@@ -1,5 +1,5 @@
 import { renderNavbar, renderFooter, showToast } from './utils.js'
-import { cartApi, ordersApi } from './api.js'
+import { cartApi } from './api.js'
 
 renderNavbar(document.getElementById('navbar')!)
 renderFooter(document.getElementById('footer')!)
@@ -60,19 +60,8 @@ async function loadCart(): Promise<void> {
   }
 }
 
-document.getElementById('btn-checkout')?.addEventListener('click', async () => {
-  try {
-    const items = await cartApi.getCart(userId)
-    if (items.length === 0) return showToast('El carrito esta vacio')
-    for (const item of items) {
-      await ordersApi.create({ userId, productId: item.productId, quantity: item.quantity, status: 'PENDIENTE', totalPrice: item.unitPrice * item.quantity })
-    }
-    await cartApi.clearCart(userId)
-    showToast('Pedido realizado con exito')
-    setTimeout(loadCart, 1500)
-  } catch {
-    showToast('Error al procesar el pedido')
-  }
+document.getElementById('btn-checkout')?.addEventListener('click', () => {
+  location.href = '/checkout.html'
 })
 
 loadCart()

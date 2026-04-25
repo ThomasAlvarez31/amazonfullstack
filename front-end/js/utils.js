@@ -26,11 +26,13 @@ export function renderNavbar(el) {
         <span>Hola, ${username}</span>
         <span>${localStorage.getItem('token') ? 'Cerrar sesion' : 'Cuenta y listas'}</span>
       </div>
-      <a class="navbar__cart" href="/cart.html">
-        <span class="navbar__cart__label">Carrito</span>
-        <span class="navbar__cart__count" id="cart-count">0</span>
-      </a>
-      ${localStorage.getItem('role') === 'ADMIN' ? '<a class="navbar__admin" href="/admin.html">Admin</a>' : ''}
+      <button class="navbar__iconbtn" onclick="location.href='/wishlist.html'">
+        Lista de deseos
+      </button>
+      <button class="navbar__iconbtn" onclick="location.href='/cart.html'">
+        Carrito <span class="navbar__badge" id="cart-count">0</span>
+      </button>
+      ${localStorage.getItem('role') === 'ADMIN' ? '<button class="navbar__admin" onclick="location.href=\'/admin.html\'">Admin</button>' : ''}
     </nav>
     <nav class="subnav">
       <a class="subnav__menu" href="#">&#9776; Todas las categorias</a>

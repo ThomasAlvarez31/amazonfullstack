@@ -47,7 +47,7 @@ function productCard(p: Product): string {
   const reviews = Math.floor(Math.random() * 3000) + 50
   const letter  = p.name.charAt(0).toUpperCase()
   return `
-    <div class="product-card">
+    <div class="product-card" onclick="location.href='/detail.html?id=${p.id}'" style="cursor:pointer">
       <div class="product-card__img">${letter}</div>
       <div class="product-card__name">${p.name}</div>
       <div class="product-card__rating">

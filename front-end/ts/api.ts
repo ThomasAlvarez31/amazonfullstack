@@ -34,7 +34,7 @@ export const authApi = {
 }
 
 export const productsApi = {
-  getAll:  () => get<Product[]>(`${BASE}/api/products`),
+  getAll:  ()           => get<Product[]>(`${BASE}/api/products`),
   getById: (id: number) => get<Product>(`${BASE}/api/products/${id}`),
 }
 
