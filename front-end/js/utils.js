@@ -2,11 +2,13 @@ import { cartApi } from './api.js';
 export function renderNavbar(el) {
     const username = localStorage.getItem('username') ?? 'Identificate';
     const userId = Number(localStorage.getItem('userId') ?? 1);
+    const loggedIn = !!localStorage.getItem('token');
+    const isAdmin = localStorage.getItem('role') === 'ADMIN';
     el.innerHTML = `
     <nav class="navbar">
-      <a class="navbar__logo" href="/index.html">
-        <span>amazon<em>.cl</em></span>
-      </a>
+      <button class="navbar__logo" onclick="location.href='/index.html'">
+        amazon<em>.cl</em>
+      </button>
       <div class="navbar__location">
         <span>Entregar a</span>
         <span>Chile</span>
@@ -20,29 +22,29 @@ export function renderNavbar(el) {
           <option>Hogar</option>
         </select>
         <input id="nav-search" type="text" placeholder="Buscar en Amazon.cl" />
-        <button id="nav-search-btn">Buscar</button>
+        <button id="nav-search-btn">&#9906;</button>
       </div>
-      <div class="navbar__account" id="nav-account">
-        <span>Hola, ${username}</span>
-        <span>${localStorage.getItem('token') ? 'Cerrar sesion' : 'Cuenta y listas'}</span>
+      <div class="navbar__item" id="nav-account" style="cursor:pointer">
+        <span>Hola, ${loggedIn ? username : 'Identificate'}</span>
+        <span>${loggedIn ? 'Cerrar sesion' : 'Cuenta y listas'}</span>
       </div>
       <button class="navbar__iconbtn" onclick="location.href='/wishlist.html'">
         Lista de deseos
       </button>
       <button class="navbar__iconbtn" onclick="location.href='/cart.html'">
-        Carrito <span class="navbar__badge" id="cart-count">0</span>
+        Carrito&nbsp;<span class="navbar__badge" id="cart-count">0</span>
       </button>
-      ${localStorage.getItem('role') === 'ADMIN' ? '<button class="navbar__admin" onclick="location.href=\'/admin.html\'">Admin</button>' : ''}
+      ${isAdmin ? '<button class="navbar__admin" onclick="location.href=\'/admin.html\'">Admin</button>' : ''}
     </nav>
     <nav class="subnav">
-      <a class="subnav__menu" href="#">&#9776; Todas las categorias</a>
-      <a href="#">Ofertas del dia</a>
-      <a href="/products.html">Productos</a>
-      <a href="#">Electronica</a>
-      <a href="#">Ropa</a>
-      <a href="#">Hogar</a>
-      <a href="#">Libros</a>
-      <a href="#">Juguetes</a>
+      <button class="bold" onclick="location.href='/products.html'">&#9776; Todas las categorias</button>
+      <button onclick="location.href='/products.html'">Ofertas del dia</button>
+      <button onclick="location.href='/products.html'">Productos</button>
+      <button onclick="location.href='/products.html?q=electronica'">Electronica</button>
+      <button onclick="location.href='/products.html?q=ropa'">Ropa</button>
+      <button onclick="location.href='/products.html?q=hogar'">Hogar</button>
+      <button onclick="location.href='/products.html?q=libros'">Libros</button>
+      <button onclick="location.href='/products.html?q=juguetes'">Juguetes</button>
     </nav>
   `;
     document.getElementById('nav-search-btn')?.addEventListener('click', () => {
@@ -57,21 +59,22 @@ export function renderNavbar(el) {
     document.getElementById('nav-account')?.addEventListener('click', () => {
         if (localStorage.getItem('token')) {
             localStorage.clear();
-            window.location.reload();
+            window.location.href = '/index.html';
         }
-        else
+        else {
             window.location.href = '/login.html';
+        }
     });
     cartApi.getCart(userId).then(items => {
         const n = items.reduce((s, i) => s + i.quantity, 0);
-        const el = document.getElementById('cart-count');
-        if (el)
-            el.textContent = String(n);
+        const badge = document.getElementById('cart-count');
+        if (badge)
+            badge.textContent = String(n);
     }).catch(() => { });
 }
 export function renderFooter(el) {
     el.innerHTML = `
-    <div class="footer-back" onclick="window.scrollTo({top:0,behavior:'smooth'})">Volver al principio</div>
+    <div class="footer-back" onclick="window.scrollTo({top:0,behavior:'smooth'})">Volver al principio &#8593;</div>
     <div class="footer-main">
       <div class="footer-grid">
         <div class="footer-col">
@@ -99,7 +102,7 @@ export function renderFooter(el) {
     </div>
     <div class="footer-bottom">
       <strong>amazon<em>.cl</em></strong>
-      <p style="margin-top:8px">2025 - Recreacion academica</p>
+      <p style="margin-top:5px;font-size:11px;color:#777">2025 - Recreacion academica</p>
     </div>
   `;
 }
@@ -109,9 +112,12 @@ export function showToast(msg) {
         toast = document.createElement('div');
         toast.id = 'toast';
         toast.className = 'toast';
+        toast.innerHTML = '<span class="toast-icon">&#10003;</span><span id="toast-msg"></span>';
         document.body.appendChild(toast);
     }
-    toast.textContent = msg;
+    const msgEl = document.getElementById('toast-msg');
+    if (msgEl)
+        msgEl.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2800);
 }

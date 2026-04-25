@@ -54,11 +54,11 @@ function productCard(p: Product): string {
         <span class="stars">${stars(rating)}</span>
         <span style="color:#555">(${reviews})</span>
       </div>
-      <div class="product-card__price"><span class="product-card__price-small">$</span>${p.price.toLocaleString('es-CL')}</div>
-      <div class="product-card__prime">Prime - Entrega gratis</div>
-      <div class="product-card__btn">
-        <button class="btn-add-cart" data-id="${p.id}" data-price="${p.price}">Agregar al carrito</button>
-        <button class="btn-wishlist" data-id="${p.id}">Lista de deseos</button>
+      <div class="product-card__price"><sup>$</sup>${p.price.toLocaleString('es-CL')}</div>
+      <div class="product-card__prime">Prime · Entrega gratis</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px" onclick="event.stopPropagation()">
+        <button class="btn-orange btn-orange--full" data-id="${p.id}" data-price="${p.price}" data-action="cart">Agregar al carrito</button>
+        <button class="btn-ghost btn-ghost--full" data-id="${p.id}" data-action="wish">Lista de deseos</button>
       </div>
     </div>
   `
@@ -78,18 +78,16 @@ async function loadProducts(): Promise<void> {
 }
 
 function attachEvents(products: Product[]): void {
-  document.querySelectorAll<HTMLButtonElement>('.btn-add-cart').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.stopPropagation()
+  document.querySelectorAll<HTMLButtonElement>('[data-action="cart"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
       await cartApi.addItem({ userId, productId: Number(btn.dataset['id']), quantity: 1, unitPrice: Number(btn.dataset['price']) })
       showToast('Agregado al carrito')
       const c = document.getElementById('cart-count')
       if (c) c.textContent = String(Number(c.textContent) + 1)
     })
   })
-  document.querySelectorAll<HTMLButtonElement>('.btn-wishlist').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.stopPropagation()
+  document.querySelectorAll<HTMLButtonElement>('[data-action="wish"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
       await wishlistApi.add({ userId, productId: Number(btn.dataset['id']) })
       showToast('Guardado en lista de deseos')
     })
