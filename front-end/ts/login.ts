@@ -34,7 +34,7 @@ document.getElementById('btn-login')?.addEventListener('click', async () => {
     localStorage.setItem('role', res.role)
     window.location.href = res.role === 'ADMIN' ? '/admin.html' : '/index.html'
   } catch {
-    errorEl.textContent = 'Email o contrasena incorrectos'
+    errorEl.textContent = 'Email o contraseña incorrectos'
     errorEl.classList.add('show')
   }
 })

@@ -102,7 +102,7 @@ export function renderFooter(el) {
     </div>
     <div class="footer-bottom">
       <img src="/assets/logo-dark.svg" height="28" alt="Amazon.cl" style="filter:brightness(0) invert(1);margin-bottom:6px" />
-      <p style="font-size:11px;color:#777">2025 - Recreacion academica</p>
+      <p style="font-size:11px;color:#777">2026 - Recreacion academica</p>
     </div>
   `;
 }
