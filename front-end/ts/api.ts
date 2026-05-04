@@ -1,6 +1,6 @@
 import type { Product, CartItem, Order, Review, SearchResult, WishlistItem, AuthResponse } from './types.js'
 
-const BASE = 'http://localhost:8080'
+const BASE = ''
 
 function headers(): HeadersInit {
   const token = localStorage.getItem('token')
