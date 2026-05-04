@@ -16,3 +16,10 @@ front-end/node_modules/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code
+.claude/
+
+# Postman
+.postman/
+postman/
