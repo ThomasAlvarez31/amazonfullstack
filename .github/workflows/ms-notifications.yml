@@ -42,11 +42,12 @@ jobs:
           host: ${{ secrets.EC2_APP2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-            proxy_host: ${{ secrets.EC2_WEB_HOST }}
-            proxy_username: ec2-user
-            proxy_key: ${{ secrets.EC2_SSH_KEY }}
+          proxy_host: ${{ secrets.EC2_WEB_HOST }}
+          proxy_username: ec2-user
+          proxy_key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
             cd ~/amazonfullstack
-            docker compose pull ms-notifications
-            docker compose up -d --no-deps ms-notifications
+            git pull origin feature/devops-evaluacion-2
+            docker compose -f docker-compose.app2.yml --env-file .env pull ms-notifications
+            docker compose -f docker-compose.app2.yml --env-file .env up -d --no-deps ms-notifications
