@@ -1,0 +1,84 @@
+version: '3.8'
+
+networks:
+  amazon-net:
+    driver: bridge
+
+services:
+  ms-auth:
+    image: ${ECR}/amazon-ms-auth:latest
+    container_name: ms-auth
+    networks: [amazon-net]
+    ports:
+      - "9000:9000"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: authdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-users:
+    image: ${ECR}/amazon-ms-users:latest
+    container_name: ms-users
+    networks: [amazon-net]
+    ports:
+      - "8082:8082"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: usersdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-products:
+    image: ${ECR}/amazon-ms-products:latest
+    container_name: ms-products
+    networks: [amazon-net]
+    ports:
+      - "8085:8085"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: productsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-cart:
+    image: ${ECR}/amazon-ms-cart:latest
+    container_name: ms-cart
+    networks: [amazon-net]
+    ports:
+      - "8087:8087"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: cartdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-wishlist:
+    image: ${ECR}/amazon-ms-wishlist:latest
+    container_name: ms-wishlist
+    networks: [amazon-net]
+    ports:
+      - "8092:8092"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: wishlistdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-search:
+    image: ${ECR}/amazon-ms-search:latest
+    container_name: ms-search
+    networks: [amazon-net]
+    ports:
+      - "8091:8091"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: searchdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
