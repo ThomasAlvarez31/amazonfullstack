@@ -48,6 +48,6 @@ jobs:
           script: |
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
             cd ~/amazonfullstack
-            git pull origin feature/devops-evaluacion-2
+            git pull origin deploy
             docker compose -f docker-compose.app2.yml --env-file .env pull ms-inventory
             docker compose -f docker-compose.app2.yml --env-file .env up -d --no-deps ms-inventory
