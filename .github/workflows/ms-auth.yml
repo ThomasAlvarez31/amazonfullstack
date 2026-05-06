@@ -40,15 +40,14 @@ jobs:
       - name: Desplegar en EC2
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.EC2_APP1_HOST }}
+          host: ${{ secrets.EC2_WEB_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          proxy_host: ${{ secrets.EC2_WEB_HOST }}
-          proxy_username: ec2-user
-          proxy_key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-            cd ~/amazonfullstack
-            git pull origin deploy
-            docker compose -f docker-compose.app1.yml --env-file .env pull ms-auth
-            docker compose -f docker-compose.app1.yml --env-file .env up -d --no-deps ms-auth
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key ec2-user@${{ secrets.EC2_APP1_HOST }} "
+              aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com &&
+              cd ~/amazonfullstack &&
+              git pull origin deploy &&
+              docker compose -f docker-compose.app1.yml --env-file .env pull ms-auth &&
+              docker compose -f docker-compose.app1.yml --env-file .env up -d --no-deps ms-auth
+            "
