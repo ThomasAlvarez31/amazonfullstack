@@ -19,61 +19,61 @@ spring:
             allowedHeaders: "*"
       routes:
         - id: ms-auth
-          uri: http://ms-auth:9000
+          uri: http://${APP1_HOST:ms-auth}:9000
           predicates:
             - Path=/api/auth/**
 
         - id: ms-users
-          uri: http://ms-users:8082
+          uri: http://${APP1_HOST:ms-users}:8082
           predicates:
             - Path=/api/users/**
 
         - id: ms-products
-          uri: http://ms-products:8085
+          uri: http://${APP1_HOST:ms-products}:8085
           predicates:
             - Path=/api/products/**
 
         - id: ms-cart
-          uri: http://ms-cart:8087
+          uri: http://${APP1_HOST:ms-cart}:8087
           predicates:
             - Path=/api/cart/**
 
+        - id: ms-wishlist
+          uri: http://${APP1_HOST:ms-wishlist}:8092
+          predicates:
+            - Path=/api/wishlist/**
+
+        - id: ms-search
+          uri: http://${APP1_HOST:ms-search}:8091
+          predicates:
+            - Path=/api/search/**
+
         - id: ms-orders
-          uri: http://ms-orders:8084
+          uri: http://${APP2_HOST:ms-orders}:8084
           predicates:
             - Path=/api/orders/**
 
         - id: ms-inventory
-          uri: http://ms-inventory:8083
+          uri: http://${APP2_HOST:ms-inventory}:8083
           predicates:
             - Path=/api/inventory/**
 
         - id: ms-payments
-          uri: http://ms-payments:8086
+          uri: http://${APP2_HOST:ms-payments}:8086
           predicates:
             - Path=/api/payments/**
 
         - id: ms-shipping
-          uri: http://ms-shipping:8088
+          uri: http://${APP2_HOST:ms-shipping}:8088
           predicates:
             - Path=/api/shipping/**
 
         - id: ms-notifications
-          uri: http://ms-notifications:8089
+          uri: http://${APP2_HOST:ms-notifications}:8089
           predicates:
             - Path=/api/notifications/**
 
         - id: ms-reviews
-          uri: http://ms-reviews:8090
+          uri: http://${APP2_HOST:ms-reviews}:8090
           predicates:
             - Path=/api/reviews/**
-
-        - id: ms-search
-          uri: http://ms-search:8091
-          predicates:
-            - Path=/api/search/**
-
-        - id: ms-wishlist
-          uri: http://ms-wishlist:8092
-          predicates:
-            - Path=/api/wishlist/**

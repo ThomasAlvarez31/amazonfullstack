@@ -1,0 +1,107 @@
+version: '3.8'
+
+networks:
+  amazon-net:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    networks: [amazon-net]
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    networks: [amazon-net]
+    depends_on: [zookeeper]
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  ms-orders:
+    image: ${ECR}/amazon-ms-orders:latest
+    container_name: ms-orders
+    networks: [amazon-net]
+    ports:
+      - "8084:8084"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ordersdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-payments:
+    image: ${ECR}/amazon-ms-payments:latest
+    container_name: ms-payments
+    networks: [amazon-net]
+    ports:
+      - "8086:8086"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: paymentsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-shipping:
+    image: ${ECR}/amazon-ms-shipping:latest
+    container_name: ms-shipping
+    networks: [amazon-net]
+    ports:
+      - "8088:8088"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: shippingdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-inventory:
+    image: ${ECR}/amazon-ms-inventory:latest
+    container_name: ms-inventory
+    networks: [amazon-net]
+    ports:
+      - "8083:8083"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: inventorydb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-reviews:
+    image: ${ECR}/amazon-ms-reviews:latest
+    container_name: ms-reviews
+    networks: [amazon-net]
+    ports:
+      - "8090:8090"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: reviewsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JAVA_OPTS: -Xmx256m
+
+  ms-notifications:
+    image: ${ECR}/amazon-ms-notifications:latest
+    container_name: ms-notifications
+    networks: [amazon-net]
+    ports:
+      - "8089:8089"
+    depends_on: [kafka]
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: notificationsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      JAVA_OPTS: -Xmx256m

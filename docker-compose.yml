@@ -1,10 +1,42 @@
 version: '3.8'
 
+networks:
+  amazon-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+
 services:
+
+  # ── Base de datos ──────────────────────────────────────────────────────────
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-amazon
+    networks:
+      - amazon-net
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ── Mensajería ─────────────────────────────────────────────────────────────
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
+    networks:
+      - amazon-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -12,6 +44,8 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
+    networks:
+      - amazon-net
     depends_on:
       - zookeeper
     ports:
@@ -22,85 +56,222 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+  # ── Microservicios ─────────────────────────────────────────────────────────
+
   ms-auth:
     build: ./ms-auth
     container_name: ms-auth
+    networks:
+      - amazon-net
     ports:
       - "9000:9000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: authdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-users:
     build: ./ms-users
     container_name: ms-users
+    networks:
+      - amazon-net
     ports:
       - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: usersdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-inventory:
     build: ./ms-inventory
     container_name: ms-inventory
+    networks:
+      - amazon-net
     ports:
       - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: inventorydb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-orders:
     build: ./ms-orders
     container_name: ms-orders
+    networks:
+      - amazon-net
     ports:
       - "8084:8084"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: ordersdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-products:
     build: ./ms-products
     container_name: ms-products
+    networks:
+      - amazon-net
     ports:
       - "8085:8085"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: productsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-payments:
     build: ./ms-payments
     container_name: ms-payments
+    networks:
+      - amazon-net
     ports:
       - "8086:8086"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: paymentsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-cart:
     build: ./ms-cart
     container_name: ms-cart
+    networks:
+      - amazon-net
     ports:
       - "8087:8087"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: cartdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-shipping:
     build: ./ms-shipping
     container_name: ms-shipping
+    networks:
+      - amazon-net
     ports:
       - "8088:8088"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: shippingdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-notifications:
     build: ./ms-notifications
     container_name: ms-notifications
-    depends_on:
-      - kafka
+    networks:
+      - amazon-net
     ports:
       - "8089:8089"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: notificationsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      JAVA_OPTS: -Xmx256m
 
   ms-reviews:
     build: ./ms-reviews
     container_name: ms-reviews
+    networks:
+      - amazon-net
     ports:
       - "8090:8090"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: reviewsdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-search:
     build: ./ms-search
     container_name: ms-search
+    networks:
+      - amazon-net
     ports:
       - "8091:8091"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: searchdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
 
   ms-wishlist:
     build: ./ms-wishlist
     container_name: ms-wishlist
+    networks:
+      - amazon-net
     ports:
       - "8092:8092"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-amazon
+      DB_NAME: wishlistdb
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      JAVA_OPTS: -Xmx256m
+
+  # ── Gateway ────────────────────────────────────────────────────────────────
 
   ms-gateway:
     build: ./ms-gateway
     container_name: ms-gateway
+    networks:
+      - amazon-net
     ports:
       - "8080:8080"
     depends_on:
@@ -116,3 +287,15 @@ services:
       - ms-reviews
       - ms-search
       - ms-wishlist
+
+  # ── Frontend ───────────────────────────────────────────────────────────────
+
+  front-end:
+    build: ./front-end
+    container_name: front-end
+    networks:
+      - amazon-net
+    ports:
+      - "80:80"
+    depends_on:
+      - ms-gateway
