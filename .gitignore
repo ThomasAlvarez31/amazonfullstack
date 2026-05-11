@@ -20,6 +20,15 @@ Thumbs.db
 # Claude Code
 .claude/
 AI_CONTEXT.md
+MATRIZ_EP2.md
+
+# Archivos internos de analisis
+*_ANALISIS.md
+ANALISIS_*.md
+NOTAS_*.md
+*_NOTAS.md
+BORRADOR_*.md
+*_BORRADOR.md
 
 # Postman
 .postman/
