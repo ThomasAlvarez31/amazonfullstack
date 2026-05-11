@@ -11,6 +11,7 @@ services:
   mysql:
     image: mysql:8
     container_name: mysql-amazon
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "3306:3306"

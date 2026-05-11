@@ -49,3 +49,4 @@ jobs:
             git pull origin deploy
             docker compose -f docker-compose.web.yml --env-file .env pull front-end
             docker compose -f docker-compose.web.yml --env-file .env up -d --no-deps front-end
+            docker inspect -f '{{.State.Running}}' front-end | grep -q true

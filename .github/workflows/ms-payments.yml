@@ -48,7 +48,8 @@ jobs:
                 "cd /home/ec2-user/amazonfullstack && git pull origin deploy",
                 "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com",
                 "docker compose -f docker-compose.app2.yml --env-file .env pull ms-payments",
-                "docker compose -f docker-compose.app2.yml --env-file .env up -d --no-deps ms-payments"
+                "docker compose -f docker-compose.app2.yml --env-file .env up -d --no-deps ms-payments",
+                "docker inspect -f '{{.State.Running}}' ms-payments | grep -q true"
               ]
             }
           }

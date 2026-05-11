@@ -8,6 +8,7 @@ services:
   ms-auth:
     image: ${ECR}/amazon-ms-auth:latest
     container_name: ms-auth
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "9000:9000"
@@ -21,6 +22,7 @@ services:
   ms-users:
     image: ${ECR}/amazon-ms-users:latest
     container_name: ms-users
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8082:8082"
@@ -34,6 +36,7 @@ services:
   ms-products:
     image: ${ECR}/amazon-ms-products:latest
     container_name: ms-products
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8085:8085"
@@ -47,6 +50,7 @@ services:
   ms-cart:
     image: ${ECR}/amazon-ms-cart:latest
     container_name: ms-cart
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8087:8087"
@@ -60,6 +64,7 @@ services:
   ms-wishlist:
     image: ${ECR}/amazon-ms-wishlist:latest
     container_name: ms-wishlist
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8092:8092"
@@ -73,6 +78,7 @@ services:
   ms-search:
     image: ${ECR}/amazon-ms-search:latest
     container_name: ms-search
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8091:8091"

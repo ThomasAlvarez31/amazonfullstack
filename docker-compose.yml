@@ -14,6 +14,7 @@ services:
   mysql:
     image: mysql:8
     container_name: mysql-amazon
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -35,6 +36,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
+    restart: unless-stopped
     networks:
       - amazon-net
     environment:
@@ -44,6 +46,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
+    restart: unless-stopped
     networks:
       - amazon-net
     depends_on:
@@ -61,6 +64,7 @@ services:
   ms-auth:
     build: ./ms-auth
     container_name: ms-auth
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -78,6 +82,7 @@ services:
   ms-users:
     build: ./ms-users
     container_name: ms-users
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -95,6 +100,7 @@ services:
   ms-inventory:
     build: ./ms-inventory
     container_name: ms-inventory
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -112,6 +118,7 @@ services:
   ms-orders:
     build: ./ms-orders
     container_name: ms-orders
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -129,6 +136,7 @@ services:
   ms-products:
     build: ./ms-products
     container_name: ms-products
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -146,6 +154,7 @@ services:
   ms-payments:
     build: ./ms-payments
     container_name: ms-payments
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -163,6 +172,7 @@ services:
   ms-cart:
     build: ./ms-cart
     container_name: ms-cart
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -180,6 +190,7 @@ services:
   ms-shipping:
     build: ./ms-shipping
     container_name: ms-shipping
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -197,6 +208,7 @@ services:
   ms-notifications:
     build: ./ms-notifications
     container_name: ms-notifications
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -217,6 +229,7 @@ services:
   ms-reviews:
     build: ./ms-reviews
     container_name: ms-reviews
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -234,6 +247,7 @@ services:
   ms-search:
     build: ./ms-search
     container_name: ms-search
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -251,6 +265,7 @@ services:
   ms-wishlist:
     build: ./ms-wishlist
     container_name: ms-wishlist
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -270,6 +285,7 @@ services:
   ms-gateway:
     build: ./ms-gateway
     container_name: ms-gateway
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
@@ -293,9 +309,10 @@ services:
   front-end:
     build: ./front-end
     container_name: front-end
+    restart: unless-stopped
     networks:
       - amazon-net
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - ms-gateway

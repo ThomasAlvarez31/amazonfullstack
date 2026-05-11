@@ -49,3 +49,4 @@ jobs:
             git pull origin deploy
             docker compose -f docker-compose.web.yml --env-file .env pull ms-gateway
             docker compose -f docker-compose.web.yml --env-file .env up -d --no-deps ms-gateway
+            docker inspect -f '{{.State.Running}}' ms-gateway | grep -q true

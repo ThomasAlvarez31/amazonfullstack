@@ -8,6 +8,7 @@ services:
   ms-gateway:
     image: ${ECR}/amazon-ms-gateway:latest
     container_name: ms-gateway
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8080:8080"
@@ -19,8 +20,9 @@ services:
   front-end:
     image: ${ECR}/amazon-front:latest
     container_name: front-end
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - ms-gateway

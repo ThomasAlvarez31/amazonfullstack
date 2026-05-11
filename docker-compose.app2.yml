@@ -8,6 +8,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
+    restart: unless-stopped
     networks: [amazon-net]
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -16,6 +17,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
+    restart: unless-stopped
     networks: [amazon-net]
     depends_on: [zookeeper]
     ports:
@@ -29,6 +31,7 @@ services:
   ms-orders:
     image: ${ECR}/amazon-ms-orders:latest
     container_name: ms-orders
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8084:8084"
@@ -42,6 +45,7 @@ services:
   ms-payments:
     image: ${ECR}/amazon-ms-payments:latest
     container_name: ms-payments
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8086:8086"
@@ -55,6 +59,7 @@ services:
   ms-shipping:
     image: ${ECR}/amazon-ms-shipping:latest
     container_name: ms-shipping
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8088:8088"
@@ -68,6 +73,7 @@ services:
   ms-inventory:
     image: ${ECR}/amazon-ms-inventory:latest
     container_name: ms-inventory
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8083:8083"
@@ -81,6 +87,7 @@ services:
   ms-reviews:
     image: ${ECR}/amazon-ms-reviews:latest
     container_name: ms-reviews
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8090:8090"
@@ -94,6 +101,7 @@ services:
   ms-notifications:
     image: ${ECR}/amazon-ms-notifications:latest
     container_name: ms-notifications
+    restart: unless-stopped
     networks: [amazon-net]
     ports:
       - "8089:8089"

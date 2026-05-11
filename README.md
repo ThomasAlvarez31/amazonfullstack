@@ -209,6 +209,18 @@ on:
       - '.github/workflows/ms-auth.yml'
 ```
 
+### Verificacion post-deploy
+
+Cada workflow valida que el contenedor desplegado quede efectivamente en ejecucion despues del `docker compose up -d --no-deps`.
+
+Comando de validacion usado:
+
+```bash
+docker inspect -f '{{.State.Running}}' <servicio> | grep -q true
+```
+
+Si el contenedor no queda en estado running, el job falla y el despliegue se considera no exitoso.
+
 ### Secrets configurados en GitHub
 
 | Secret                | Descripción                          |
@@ -287,3 +299,19 @@ APP2_HOST=10.0.4.96
 ```
 
 El gateway usa `${APP1_HOST}` y `${APP2_HOST}` para enrutar peticiones a los microservicios en subredes privadas.
+
+### Plantillas de entorno (sin secrets)
+
+Se incluyen plantillas para documentar variables requeridas sin exponer credenciales:
+
+- `.env.data.example`
+- `.env.app1.example`
+- `.env.app2.example`
+- `.env.web.example`
+
+Uso sugerido en cada instancia EC2:
+
+```bash
+cp .env.data.example .env
+# editar valores reales antes de levantar contenedores
+```
