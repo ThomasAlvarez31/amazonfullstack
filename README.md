@@ -15,7 +15,7 @@ Internet
 │                                                     │
 │  ┌──────────────────────────────────────────────┐   │
 │  │  Subnet Pública                              │   │
-│  │  ec2-web (98.82.167.73)                      │   │
+│  │  ec2-web (IP dinámica — ver EC2_WEB_HOST)      │   │
 │  │  ├── ms-gateway  :8080                       │   │
 │  │  └── front-end   :80   ← accesible desde web │   │
 │  └──────────────┬───────────────────────────────┘   │
@@ -269,7 +269,6 @@ Si el contenedor no queda en estado running, el job falla y el despliegue se con
 | `EC2_APP1_HOST`       | IP privada de ec2-app-1              |
 | `EC2_APP2_HOST`       | IP privada de ec2-app-2              |
 | `EC2_DATA_HOST`       | IP privada de ec2-data               |
-| `EC2_SSH_USER`        | `ec2-user`                           |
 
 Las credenciales AWS nunca se almacenan en el código — solo en GitHub Secrets.
 
@@ -356,7 +355,7 @@ cp .env.data.example .env
 
 ## Evidencia EP2
 
-**URL pública frontend:** http://44.223.110.209
+**URL pública frontend:** `http://<EC2_WEB_HOST>` (IP dinámica — cambia con cada reinicio del lab; consultar el secret `EC2_WEB_HOST` en GitHub o la consola EC2)
 
 ### Resultados por indicador
 
