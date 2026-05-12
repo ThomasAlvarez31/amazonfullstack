@@ -61,7 +61,7 @@ Solo el frontend (`ec2-web:80`) es accesible desde Internet. El resto de servici
 | Servicio           | Puerto | EC2       | Descripción                     |
 |--------------------|--------|-----------|---------------------------------|
 | ms-gateway         | 8080   | ec2-web   | API Gateway — punto de entrada  |
-| front-end          | 80     | ec2-web   | Frontend nginx + TypeScript     |
+| front-end          | 80     | ec2-web   | Frontend React + Vite sobre nginx |
 | ms-auth            | 9000   | ec2-app-1 | Autenticación y JWT             |
 | ms-users           | 8082   | ec2-app-1 | Gestión de usuarios             |
 | ms-products        | 8085   | ec2-app-1 | Catálogo de productos           |
@@ -82,11 +82,45 @@ Solo el frontend (`ec2-web:80`) es accesible desde Internet. El resto de servici
 - **Backend:** Java 17, Spring Boot 3.2.5, Spring Cloud Gateway, Spring Data JPA
 - **Base de datos:** MySQL 8 (migración desde H2 para producción)
 - **Mensajería:** Apache Kafka + Zookeeper
-- **Frontend:** TypeScript, HTML, CSS, nginx (proxy inverso al gateway)
+- **Frontend:** React 18, Vite, TypeScript, nginx (proxy inverso al gateway)
 - **Contenedores:** Docker (multi-stage build, usuario no-root), Docker Compose
 - **Registro de imágenes:** AWS ECR (13 repositorios)
 - **CI/CD:** GitHub Actions (14 workflows)
 - **Infraestructura:** AWS VPC, 4x EC2 t3.micro, Security Groups, NAT Gateway
+
+---
+
+## Frontend (React + Vite)
+
+El frontend del proyecto se construye como una SPA con React 18 + Vite + TypeScript.
+
+### Componentes principales
+
+- `front-end/src/`: codigo fuente React (rutas, vistas y cliente API)
+- `front-end/index.html`: entrada unica de la SPA (`#root`)
+- `front-end/vite.config.ts`: servidor de desarrollo y proxy de `/api`
+- `front-end/nginx.conf`: fallback SPA y proxy al gateway en produccion
+
+### Integracion con backend
+
+- En desarrollo, Vite corre en `:5173` y redirige `/api/*` a `http://localhost:8080`.
+- En produccion, Nginx sirve el build estatico y reenvia `/api/*` a `ms-gateway:8080`.
+
+### Flujo de build y runtime
+
+1. `npm run build` genera `front-end/dist/`.
+2. El `Dockerfile` de frontend construye con Node y publica con Nginx.
+3. El contenedor final expone `8080` y entrega la SPA ya compilada.
+
+### Comandos utiles (frontend)
+
+```bash
+cd front-end
+npm install
+npm run dev
+npm run build
+npm run preview
+```
 
 ---
 
@@ -115,7 +149,7 @@ EXPOSE <puerto>
 ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
-El frontend usa `nginx:alpine` como imagen final sirviendo el build estático.
+El frontend usa una imagen final `nginx` no-root para servir el build estatico generado por Vite.
 
 **Buenas prácticas aplicadas:**
 - Multi-stage: la imagen final no contiene Maven ni código fuente
@@ -267,9 +301,11 @@ amazonfullstack/
 │   └── src/...
 ├── ms-cart/ ...
 ├── front-end/
-│   ├── Dockerfile          # nginx:alpine con proxy al gateway
+│   ├── Dockerfile          # build Vite + nginx unprivileged runtime
 │   ├── nginx.conf
-│   └── ts/ html/ css/
+│   ├── src/                # app React (TypeScript)
+│   ├── css/
+│   └── vite.config.ts
 ├── docker-compose.yml      # Stack completo (desarrollo local)
 ├── docker-compose.data.yml # Solo MySQL (ec2-data)
 ├── docker-compose.app1.yml # 6 microservicios (ec2-app-1)
