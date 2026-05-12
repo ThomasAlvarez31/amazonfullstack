@@ -328,10 +328,28 @@ cp .env.data.example .env
 
 | Indicador | Resultado | Detalle |
 |-----------|-----------|---------|
+| IE3 — Persistencia con volúmenes Docker | OK | Dato persiste tras `docker restart mysql-amazon` |
+| IE4 — Pipeline CI/CD (build → push → deploy) | OK | GitHub Actions ejecuta build, push a ECR y deploy en EC2 al hacer push en rama `deploy` |
 | IE5 — Frontend en EC2 público | OK | Frontend carga en `http://44.223.110.209`, nginx responde HTTP 200 |
-| IE6 — Backend estable + BD | OK | Todos los contenedores Up en 4 nodos; MySQL healthy con volumen persistente |
+| IE6 — Backend en EC2 | OK | Todos los contenedores Up en 4 nodos; MySQL healthy con volumen persistente |
 | IE7 — Integración Front → Back | OK | Register 201 + JWT, `/api/products` y `/api/users` responden 200 |
-| IE3 — Persistencia MySQL | OK | Dato persiste tras `docker restart mysql-amazon` |
+
+### Capturas de evidencia
+
+**IE3 — Persistencia MySQL post-reinicio**
+![IE3](docs/evidencia/IE3.png)
+
+**IE4 — Pipeline CI/CD en GitHub Actions**
+![IE4](docs/evidencia/IE4.png)
+
+**IE5 — Frontend accesible desde navegador**
+![IE5](docs/evidencia/IE5.png)
+
+**IE6 — Contenedores Up en los 4 nodos EC2**
+![IE6](docs/evidencia/IE6%20EC2-WEB.png)
+
+**IE7 — Integración Front → Back**
+![IE7](docs/evidencia/IE7.png)
 
 ### Comandos de validación usados
 
