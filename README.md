@@ -328,6 +328,8 @@ cp .env.data.example .env
 
 | Indicador | Resultado | Detalle |
 |-----------|-----------|---------|
+| IE1 — Contenedorización Frontend y Backend (Dockerfile multi-stage) | OK | 14 Dockerfiles multi-stage en `front-end/Dockerfile` y `ms-*/Dockerfile` |
+| IE2 — Configuración docker-compose.yml | OK | Stack dividido por responsabilidad: `docker-compose.web.yml`, `docker-compose.app1.yml`, `docker-compose.app2.yml`, `docker-compose.data.yml` |
 | IE3 — Persistencia con volúmenes Docker | OK | Dato persiste tras `docker restart mysql-amazon` |
 | IE4 — Pipeline CI/CD (build → push → deploy) | OK | GitHub Actions ejecuta build, push a ECR y deploy en EC2 al hacer push en rama `deploy` |
 | IE5 — Frontend en EC2 público | OK | Frontend carga en `http://44.223.110.209`, nginx responde HTTP 200 |
