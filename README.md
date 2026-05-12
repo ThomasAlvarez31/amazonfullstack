@@ -315,3 +315,64 @@ Uso sugerido en cada instancia EC2:
 cp .env.data.example .env
 # editar valores reales antes de levantar contenedores
 ```
+
+---
+
+## Evidencia EP2
+
+**URL pública frontend:** http://44.223.110.209
+
+**Fecha/hora de validación:** 2026-05-12 00:25 UTC
+
+### Resultados por indicador
+
+| Indicador | Resultado | Detalle |
+|-----------|-----------|---------|
+| IE5 — Frontend en EC2 público | OK | Frontend carga en `http://44.223.110.209`, nginx responde HTTP 200 |
+| IE6 — Backend estable + BD | OK | Todos los contenedores Up en 4 nodos; MySQL healthy con volumen persistente |
+| IE7 — Integración Front → Back | OK | Register 201 + JWT, `/api/products` y `/api/users` responden 200 |
+| IE3 — Persistencia MySQL | OK | Dato persiste tras `docker restart mysql-amazon` |
+
+### Comandos de validación usados
+
+```bash
+# IE5 — frontend
+curl -I http://localhost:80
+docker ps --filter "name=front-end" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# IE6 — gateway y rutas
+curl -i http://localhost:8080/actuator/health
+curl -i http://localhost:8080/api/products
+curl -i http://localhost:8080/api/users
+
+# IE7 — register vía gateway
+curl -i -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test.gateway2026@test.com","password":"password123"}'
+
+# IE3 — persistencia
+docker exec -i mysql-amazon mysql -uroot -prootpass productsdb \
+  -e "INSERT INTO product (name, price) VALUES ('Producto Test EP2', 9999);"
+docker restart mysql-amazon
+docker exec -i mysql-amazon mysql -uroot -prootpass productsdb \
+  -e "SELECT * FROM product;"
+```
+
+### Respuestas obtenidas
+
+```
+# IE5
+HTTP/1.1 200 OK — Server: nginx/1.29.8
+
+# IE6 — actuator
+HTTP/1.1 200 OK — {"status":"UP"}
+
+# IE6 — productos
+HTTP/1.1 200 OK — [{"id":1,"name":"Producto Test EP2","price":9999.0}]
+
+# IE7 — register
+HTTP/1.1 201 Created — {"role":"USER","token":"eyJhbGci..."}
+
+# IE3 — select post restart
+id: 1 | name: Producto Test EP2 | price: 9999
+```
