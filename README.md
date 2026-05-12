@@ -322,8 +322,6 @@ cp .env.data.example .env
 
 **URL pública frontend:** http://44.223.110.209
 
-**Fecha/hora de validación:** 2026-05-12 00:25 UTC
-
 ### Resultados por indicador
 
 | Indicador | Resultado | Detalle |
