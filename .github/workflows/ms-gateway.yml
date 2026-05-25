@@ -37,16 +37,24 @@ jobs:
           docker push $REGISTRY/amazon-ms-gateway:$IMAGE_TAG
           docker push $REGISTRY/amazon-ms-gateway:latest
 
-      - name: Desplegar en EC2
-        uses: appleboy/ssh-action@v1
+      - name: Descargar Task Definition actual
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ secrets.ECS_TASK_DEF_GATEWAY }} \
+            --query taskDefinition > task-definition.json
+
+      - name: Actualizar imagen en Task Definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          host: ${{ secrets.EC2_WEB_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-            cd ~/amazonfullstack
-            git pull origin deploy
-            docker compose -f docker-compose.web.yml --env-file .env pull ms-gateway
-            docker compose -f docker-compose.web.yml --env-file .env up -d --no-deps ms-gateway
-            docker inspect -f '{{.State.Running}}' ms-gateway | grep -q true
+          task-definition: task-definition.json
+          container-name: ms-gateway
+          image: ${{ steps.login-ecr.outputs.registry }}/amazon-ms-gateway:${{ github.sha }}
+
+      - name: Desplegar en ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE_GATEWAY }}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
