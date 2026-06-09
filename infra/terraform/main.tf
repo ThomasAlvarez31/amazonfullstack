@@ -299,7 +299,7 @@ resource "aws_autoscaling_group" "eks_nodes" {
   max_size         = 3
   desired_capacity = 2
 
-  vpc_zone_identifier = [var.private_app1_subnet_id, var.private_app2_subnet_id]
+  vpc_zone_identifier = [var.private_app1_subnet_id]
 
   launch_template {
     id      = aws_launch_template.eks_nodes.id

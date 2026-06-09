@@ -5,6 +5,8 @@ metadata:
   namespace: amazon
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: ms-notifications
@@ -43,10 +45,10 @@ spec:
               value: "-Xmx256m"
           resources:
             requests:
-              memory: "256Mi"
+              memory: "128Mi"
               cpu: "100m"
             limits:
-              memory: "512Mi"
+              memory: "256Mi"
               cpu: "500m"
 ---
 apiVersion: v1
