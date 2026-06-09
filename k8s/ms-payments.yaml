@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-payments
+  namespace: amazon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-payments
+  template:
+    metadata:
+      labels:
+        app: ms-payments
+    spec:
+      containers:
+        - name: ms-payments
+          image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon-ms-payments:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8086
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: amazon-secrets
+                  key: DB_HOST
+            - name: DB_NAME
+              value: paymentsdb
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amazon-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: JAVA_OPTS
+              value: "-Xmx256m"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-payments
+  namespace: amazon
+spec:
+  selector:
+    app: ms-payments
+  ports:
+    - port: 8086
+      targetPort: 8086
+  type: ClusterIP

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-cart
+  namespace: amazon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-cart
+  template:
+    metadata:
+      labels:
+        app: ms-cart
+    spec:
+      containers:
+        - name: ms-cart
+          image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon-ms-cart:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8087
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: amazon-secrets
+                  key: DB_HOST
+            - name: DB_NAME
+              value: cartdb
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amazon-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: JAVA_OPTS
+              value: "-Xmx256m"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-cart
+  namespace: amazon
+spec:
+  selector:
+    app: ms-cart
+  ports:
+    - port: 8087
+      targetPort: 8087
+  type: ClusterIP

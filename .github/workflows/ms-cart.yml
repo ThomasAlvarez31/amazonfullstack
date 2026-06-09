@@ -37,24 +37,19 @@ jobs:
           docker push $REGISTRY/amazon-ms-cart:$IMAGE_TAG
           docker push $REGISTRY/amazon-ms-cart:latest
 
-      - name: Desplegar en EC2 via SSM
+      - name: Instalar kubectl
         run: |
-          cat > /tmp/ssm.json << 'ENDJSON'
-          {
-            "DocumentName": "AWS-RunShellScript",
-            "InstanceIds": ["${{ secrets.EC2_APP1_INSTANCE_ID }}"],
-            "Parameters": {
-              "commands": [
-                "cd /home/ec2-user/amazonfullstack && git pull origin deploy",
-                "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com",
-                "docker compose -f docker-compose.app1.yml --env-file .env pull ms-cart",
-                "docker compose -f docker-compose.app1.yml --env-file .env up -d --no-deps ms-cart",
-                "docker inspect -f '{{.State.Running}}' ms-cart | grep -q true"
-              ]
-            }
-          }
-          ENDJSON
-          CMD_ID=$(aws ssm send-command --cli-input-json file:///tmp/ssm.json --region ${{ secrets.AWS_REGION }} --query "Command.CommandId" --output text)
-          echo "CommandId: $CMD_ID"
-          sleep 20
-          aws ssm get-command-invocation --command-id $CMD_ID --instance-id ${{ secrets.EC2_APP1_INSTANCE_ID }} --region ${{ secrets.AWS_REGION }} --query "[StatusDetails,StandardOutputContent]" --output text
+          curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Configurar kubectl para EKS
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Desplegar en EKS
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          kubectl set image deployment/ms-cart ms-cart=$REGISTRY/amazon-ms-cart:$IMAGE_TAG -n amazon
+          kubectl rollout status deployment/ms-cart -n amazon --timeout=120s

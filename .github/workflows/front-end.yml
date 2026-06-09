@@ -37,16 +37,19 @@ jobs:
           docker push $REGISTRY/amazon-front:$IMAGE_TAG
           docker push $REGISTRY/amazon-front:latest
 
-      - name: Desplegar en EC2
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.EC2_WEB_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-            cd ~/amazonfullstack
-            git pull origin deploy
-            docker compose -f docker-compose.web.yml --env-file .env pull front-end
-            docker compose -f docker-compose.web.yml --env-file .env up -d --no-deps front-end
-            docker inspect -f '{{.State.Running}}' front-end | grep -q true
+      - name: Instalar kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Configurar kubectl para EKS
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Desplegar en EKS
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          kubectl set image deployment/front-end front-end=$REGISTRY/amazon-front:$IMAGE_TAG -n amazon
+          kubectl rollout status deployment/front-end -n amazon --timeout=120s

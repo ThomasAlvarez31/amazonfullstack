@@ -1,0 +1,69 @@
+name: EKS Setup Inicial
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Instalar kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Configurar kubectl para EKS
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Crear namespace
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+
+      - name: Crear secret amazon-secrets
+        run: |
+          kubectl create secret generic amazon-secrets \
+            --from-literal=DB_HOST=${{ secrets.EC2_DATA_HOST }} \
+            --from-literal=MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+            --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            --from-literal=KAFKA_HOST=${{ secrets.EC2_APP2_HOST }}:9092 \
+            --namespace=amazon \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Aplicar todos los manifiestos K8s
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          for f in k8s/*.yaml; do
+            [ "$f" = "k8s/namespace.yaml" ] && continue
+            envsubst < "$f" | kubectl apply -f -
+          done
+
+      - name: Verificar pods
+        run: |
+          kubectl rollout status deployment/ms-gateway -n amazon --timeout=180s
+          kubectl rollout status deployment/front-end -n amazon --timeout=180s
+          kubectl get pods -n amazon
+          kubectl get svc -n amazon
+
+      - name: DNS del frontend y gateway
+        run: |
+          echo "=== Frontend DNS ==="
+          kubectl get svc front-end -n amazon -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+          echo ""
+          echo "=== Gateway DNS ==="
+          kubectl get svc ms-gateway -n amazon -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+          echo ""

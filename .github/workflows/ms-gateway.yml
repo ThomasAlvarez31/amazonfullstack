@@ -37,24 +37,19 @@ jobs:
           docker push $REGISTRY/amazon-ms-gateway:$IMAGE_TAG
           docker push $REGISTRY/amazon-ms-gateway:latest
 
-      - name: Descargar Task Definition actual
+      - name: Instalar kubectl
         run: |
-          aws ecs describe-task-definition \
-            --task-definition ${{ secrets.ECS_TASK_DEF_GATEWAY }} \
-            --query taskDefinition > task-definition.json
+          curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-      - name: Actualizar imagen en Task Definition
-        id: render-task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: ms-gateway
-          image: ${{ steps.login-ecr.outputs.registry }}/amazon-ms-gateway:${{ github.sha }}
+      - name: Configurar kubectl para EKS
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
-      - name: Desplegar en ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-          service: ${{ secrets.ECS_SERVICE_GATEWAY }}
-          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
-          wait-for-service-stability: true
+      - name: Desplegar en EKS
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          kubectl set image deployment/ms-gateway ms-gateway=$REGISTRY/amazon-ms-gateway:$IMAGE_TAG -n amazon
+          kubectl rollout status deployment/ms-gateway -n amazon --timeout=120s
