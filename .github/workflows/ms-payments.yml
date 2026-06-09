@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/ms-payments ms-payments=$REGISTRY/amazon-ms-payments:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/ms-payments -n amazon --timeout=120s
+          kubectl rollout status deployment/ms-payments -n amazon --timeout=300s

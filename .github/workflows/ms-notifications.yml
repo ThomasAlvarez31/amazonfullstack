@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/ms-notifications ms-notifications=$REGISTRY/amazon-ms-notifications:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/ms-notifications -n amazon --timeout=120s
+          kubectl rollout status deployment/ms-notifications -n amazon --timeout=300s

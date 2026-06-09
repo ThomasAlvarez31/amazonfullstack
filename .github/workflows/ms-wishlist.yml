@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/ms-wishlist ms-wishlist=$REGISTRY/amazon-ms-wishlist:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/ms-wishlist -n amazon --timeout=120s
+          kubectl rollout status deployment/ms-wishlist -n amazon --timeout=300s

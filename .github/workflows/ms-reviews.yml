@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/ms-reviews ms-reviews=$REGISTRY/amazon-ms-reviews:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/ms-reviews -n amazon --timeout=120s
+          kubectl rollout status deployment/ms-reviews -n amazon --timeout=300s

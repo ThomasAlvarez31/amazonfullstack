@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/front-end front-end=$REGISTRY/amazon-front:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/front-end -n amazon --timeout=120s
+          kubectl rollout status deployment/front-end -n amazon --timeout=300s

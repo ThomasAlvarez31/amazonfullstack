@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/ms-shipping ms-shipping=$REGISTRY/amazon-ms-shipping:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/ms-shipping -n amazon --timeout=120s
+          kubectl rollout status deployment/ms-shipping -n amazon --timeout=300s

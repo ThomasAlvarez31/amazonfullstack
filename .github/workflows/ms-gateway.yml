@@ -52,4 +52,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           kubectl set image deployment/ms-gateway ms-gateway=$REGISTRY/amazon-ms-gateway:$IMAGE_TAG -n amazon
-          kubectl rollout status deployment/ms-gateway -n amazon --timeout=120s
+          kubectl rollout status deployment/ms-gateway -n amazon --timeout=300s
