@@ -75,6 +75,7 @@
 					<excludes>
 						<exclude>com/ecommerce/users/UsersApplication.class</exclude>
 						<exclude>com/ecommerce/users/controller/*.class</exclude>
+						<exclude>com/ecommerce/users/config/SecurityConfig.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>

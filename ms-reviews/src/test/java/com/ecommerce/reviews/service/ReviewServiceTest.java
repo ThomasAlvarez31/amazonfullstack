@@ -25,6 +25,47 @@ class ReviewServiceTest {
     private ReviewService service;
 
     @Test
+    void findAll_deberiaRetornarTodasLasOpiniones() {
+        Review review = new Review();
+        review.setRating(3);
+        when(repository.findAll()).thenReturn(List.of(review));
+
+        List<Review> result = service.findAll();
+
+        assertEquals(1, result.size());
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void findById_deberiaRetornarOpinionCuandoExiste() {
+        Review review = new Review();
+        review.setComment("Test");
+        when(repository.findById(1L)).thenReturn(Optional.of(review));
+
+        Optional<Review> result = service.findById(1L);
+
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    void findById_deberiaRetornarVacioCuandoNoExiste() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<Review> result = service.findById(99L);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void update_deberiaRetornarVacioCuandoNoExiste() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<Review> result = service.update(99L, new Review());
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void findByProductId_deberiaRetornarOpinionesDelProducto() {
         Review review = new Review();
         review.setProductId(1L);

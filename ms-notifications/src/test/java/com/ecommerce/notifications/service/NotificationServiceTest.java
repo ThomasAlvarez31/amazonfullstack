@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,6 +23,40 @@ class NotificationServiceTest {
 
     @InjectMocks
     private NotificationService service;
+
+    @Test
+    void findAll_deberiaRetornarTodasLasNotificaciones() {
+        Notification n = new Notification();
+        n.setType("PUSH");
+        when(repository.findAll()).thenReturn(List.of(n));
+
+        List<Notification> resultado = service.findAll();
+
+        assertEquals(1, resultado.size());
+        assertEquals("PUSH", resultado.get(0).getType());
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void findById_deberiaRetornarNotificacionCuandoExiste() {
+        Notification n = new Notification();
+        n.setStatus("LEIDO");
+        when(repository.findById(1L)).thenReturn(Optional.of(n));
+
+        Optional<Notification> resultado = service.findById(1L);
+
+        assertTrue(resultado.isPresent());
+        assertEquals("LEIDO", resultado.get().getStatus());
+    }
+
+    @Test
+    void findById_deberiaRetornarVacioCuandoNoExiste() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<Notification> resultado = service.findById(99L);
+
+        assertFalse(resultado.isPresent());
+    }
 
     @Test
     void findByUserId_deberiaRetornarNotificacionesDelUsuario() {

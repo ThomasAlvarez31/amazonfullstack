@@ -42,8 +42,8 @@ class OrderEventConsumerTest {
         assertEquals("ORDER_CREATED", saved.getType());
         assertEquals("UNREAD", saved.getStatus());
         assertTrue(saved.getMessage().contains("#1"));
-        assertTrue(saved.getMessage().contains("150,00").replace(",", ".") ||
-                   saved.getMessage().contains("150.00"));
+        String msg = saved.getMessage().replace(",", ".");
+        assertTrue(msg.contains("150.00"));
     }
 
     @Test

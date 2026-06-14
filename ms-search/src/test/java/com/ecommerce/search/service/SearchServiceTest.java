@@ -24,6 +24,18 @@ class SearchServiceTest {
     private SearchService service;
 
     @Test
+    void findAll_deberiaRetornarTodosLosResultados() {
+        SearchResult result = new SearchResult();
+        result.setName("Producto A");
+        when(repository.findAll()).thenReturn(List.of(result));
+
+        List<SearchResult> resultados = service.findAll();
+
+        assertEquals(1, resultados.size());
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
     void search_deberiaRetornarResultadosPorKeyword() {
         SearchResult result = new SearchResult();
         result.setProductId(1L);
