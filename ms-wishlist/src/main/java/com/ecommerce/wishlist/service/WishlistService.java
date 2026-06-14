@@ -7,6 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Servicio de negocio para la gestión de listas de deseos por usuario.
+ */
 @Service
 public class WishlistService {
 

@@ -3,6 +3,7 @@ package com.ecommerce.auth.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,11 @@ import com.ecommerce.auth.service.AuthService;
 
 import java.util.Map;
 
+/**
+ * Controlador REST para autenticación y registro de usuarios.
+ * Genera y valida tokens JWT con fecha de expiración.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Auth", description = "Autenticación y registro con JWT")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -37,6 +43,15 @@ public class AuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validate(Authentication authentication) {
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
+        return ResponseEntity.ok(Map.of(
+                "email", authentication.getName(),
+                "role", role.replaceFirst("^ROLE_", "")
+        ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

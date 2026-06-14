@@ -1,9 +1,12 @@
 package com.ecommerce.orders.service;
 
+import com.ecommerce.orders.event.OrderCreatedEvent;
+import com.ecommerce.orders.messaging.OrderEventPublisher;
 import com.ecommerce.orders.model.Order;
 import com.ecommerce.orders.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,6 +23,9 @@ class OrderServiceTest {
 
     @Mock
     private OrderRepository repository;
+
+    @Mock
+    private OrderEventPublisher eventPublisher;
 
     @InjectMocks
     private OrderService service;
@@ -57,7 +63,16 @@ class OrderServiceTest {
     }
 
     @Test
-    void save_deberiaGuardarYRetornarOrden() {
+    void findById_deberiaRetornarVacioCuandoNoExiste() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<Order> resultado = service.findById(99L);
+
+        assertFalse(resultado.isPresent());
+    }
+
+    @Test
+    void save_deberiaGuardarYPublicarEventoRabbitMQ() {
         Order order = new Order();
         order.setUserId(2L);
         order.setProductId(5L);
@@ -72,6 +87,13 @@ class OrderServiceTest {
         assertEquals("PENDIENTE", resultado.getStatus());
         assertEquals(50.0, resultado.getTotalPrice());
         verify(repository, times(1)).save(order);
+
+        ArgumentCaptor<OrderCreatedEvent> captor = ArgumentCaptor.forClass(OrderCreatedEvent.class);
+        verify(eventPublisher, times(1)).publishOrderCreated(captor.capture());
+        OrderCreatedEvent event = captor.getValue();
+        assertEquals(2L, event.getUserId());
+        assertEquals(5L, event.getProductId());
+        assertEquals("PENDIENTE", event.getStatus());
     }
 
     @Test
@@ -95,6 +117,16 @@ class OrderServiceTest {
         assertTrue(resultado.isPresent());
         assertEquals("ENVIADO", resultado.get().getStatus());
         assertEquals(300.0, resultado.get().getTotalPrice());
+    }
+
+    @Test
+    void update_deberiaRetornarVacioCuandoNoExiste() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<Order> resultado = service.update(99L, new Order());
+
+        assertFalse(resultado.isPresent());
+        verify(repository, never()).save(any());
     }
 
     @Test

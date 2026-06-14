@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio de negocio para la gestión de envíos asociados a órdenes.
+ */
 @Service
 public class ShipmentService {
 

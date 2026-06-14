@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión del carrito de compras.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Cart", description = "Carrito de compras por usuario")
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {

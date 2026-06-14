@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión del inventario de productos.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Inventory", description = "Gestión del inventario")
 @RestController
 @RequestMapping("/api/inventory")
 public class InventoryController {

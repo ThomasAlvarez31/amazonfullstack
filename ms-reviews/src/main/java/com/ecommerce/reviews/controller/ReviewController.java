@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de reseñas de productos.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Reviews", description = "Reseñas de productos")
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewController {

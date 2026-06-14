@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio de negocio para la gestión de pagos de órdenes.
+ */
 @Service
 public class PaymentService {
 

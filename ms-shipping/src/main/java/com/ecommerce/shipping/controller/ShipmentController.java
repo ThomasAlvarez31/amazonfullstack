@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de envíos.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Shipping", description = "Gestión de envíos")
 @RestController
 @RequestMapping("/api/shipping")
 public class ShipmentController {

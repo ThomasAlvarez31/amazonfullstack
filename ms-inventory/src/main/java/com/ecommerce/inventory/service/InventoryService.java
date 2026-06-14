@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio de negocio para la gestión del inventario de productos.
+ */
 @Service
 public class InventoryService {
 

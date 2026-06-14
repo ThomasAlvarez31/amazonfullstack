@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de listas de deseos.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Wishlist", description = "Lista de deseos por usuario")
 @RestController
 @RequestMapping("/api/wishlist")
 public class WishlistController {

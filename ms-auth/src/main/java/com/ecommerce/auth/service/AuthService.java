@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * Servicio de autenticación y registro con JWT firmado (RS256).
+ * Tokens con fecha de expiración configurada en JwtService.
+ */
 @Service
 public class AuthService {
 

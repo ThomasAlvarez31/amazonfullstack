@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la consulta de notificaciones.
+ * Las notificaciones se generan automáticamente desde eventos RabbitMQ.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Notifications", description = "Notificaciones de usuarios vía RabbitMQ")
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {

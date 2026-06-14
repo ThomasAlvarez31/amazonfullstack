@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de pagos.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Payments", description = "Gestión de pagos de órdenes")
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {

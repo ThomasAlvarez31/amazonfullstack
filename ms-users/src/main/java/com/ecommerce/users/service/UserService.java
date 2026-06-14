@@ -7,6 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+/**
+ * Servicio de negocio para la gestión de usuarios. Aplica hash de contraseñas con BCrypt.
+ */
 @Service
 public class UserService {
     @Autowired

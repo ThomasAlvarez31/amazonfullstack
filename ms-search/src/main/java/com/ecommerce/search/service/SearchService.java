@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Servicio de búsqueda de productos por nombre y categoría.
+ */
 @Service
 public class SearchService {
 

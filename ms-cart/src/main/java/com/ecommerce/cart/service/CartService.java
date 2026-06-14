@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio de negocio para la gestión del carrito de compras por usuario.
+ */
 @Service
 public class CartService {
 

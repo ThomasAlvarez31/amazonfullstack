@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para búsqueda de productos.
+ */
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Search", description = "Búsqueda de productos")
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
