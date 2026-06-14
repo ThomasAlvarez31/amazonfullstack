@@ -36,6 +36,10 @@ spec:
                 secretKeyRef:
                   name: amazon-secrets
                   key: MYSQL_ROOT_PASSWORD
+            - name: REDIS_HOST
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379"
             - name: JAVA_OPTS
               value: "-Xmx256m"
           resources:
