@@ -3,9 +3,7 @@ package com.ecommerce.notifications.kafka;
 import com.ecommerce.notifications.model.Notification;
 import com.ecommerce.notifications.service.NotificationService;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Component;
 
-@Component
 public class NotificationConsumer {
 
     private final NotificationService service;

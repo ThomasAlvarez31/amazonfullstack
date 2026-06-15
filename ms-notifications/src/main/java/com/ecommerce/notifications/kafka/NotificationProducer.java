@@ -1,9 +1,7 @@
 package com.ecommerce.notifications.kafka;
 
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 
-@Component
 public class NotificationProducer {
 
     private static final String TOPIC = "notifications";
