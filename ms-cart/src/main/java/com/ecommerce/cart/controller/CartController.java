@@ -21,16 +21,35 @@ public class CartController {
         this.service = service;
     }
 
+    /**
+     * Retorna todos los ítems del carrito de un usuario.
+     *
+     * @param userId identificador del usuario
+     * @return lista de ítems en el carrito
+     */
     @GetMapping("/{userId}")
     public List<CartItem> getCart(@PathVariable Long userId) {
         return service.getCartByUser(userId);
     }
 
+    /**
+     * Agrega un ítem al carrito.
+     *
+     * @param item datos del ítem (userId, productId, cantidad)
+     * @return ítem creado con ID generado
+     */
     @PostMapping
     public CartItem addItem(@RequestBody CartItem item) {
         return service.addItem(item);
     }
 
+    /**
+     * Actualiza la cantidad de un ítem en el carrito.
+     *
+     * @param itemId   identificador del ítem
+     * @param quantity nueva cantidad
+     * @return 200 con ítem actualizado, o 404 si no existe
+     */
     @PutMapping("/{itemId}")
     public ResponseEntity<CartItem> updateQuantity(@PathVariable Long itemId,
                                                    @RequestParam Integer quantity) {
@@ -39,6 +58,12 @@ public class CartController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Elimina un ítem del carrito.
+     *
+     * @param itemId identificador del ítem
+     * @return 204 si fue eliminado, o 404 si no existe
+     */
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> removeItem(@PathVariable Long itemId) {
         if (service.removeItem(itemId)) {
@@ -47,6 +72,12 @@ public class CartController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Vacía el carrito completo de un usuario.
+     *
+     * @param userId identificador del usuario
+     * @return 204 sin contenido
+     */
     @DeleteMapping("/clear/{userId}")
     public ResponseEntity<Void> clearCart(@PathVariable Long userId) {
         service.clearCart(userId);

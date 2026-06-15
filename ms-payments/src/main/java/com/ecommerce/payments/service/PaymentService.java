@@ -19,18 +19,42 @@ public class PaymentService {
         this.repository = repository;
     }
 
+    /**
+     * Retorna todos los pagos registrados.
+     *
+     * @return lista de pagos
+     */
     public List<Payment> findAll() {
         return repository.findAll();
     }
 
+    /**
+     * Busca un pago por su ID.
+     *
+     * @param id identificador del pago
+     * @return Optional con el pago si existe
+     */
     public Optional<Payment> findById(Long id) {
         return repository.findById(id);
     }
 
+    /**
+     * Persiste un nuevo pago asociado a una orden.
+     *
+     * @param payment datos del pago (orderId, amount, status, paymentMethod)
+     * @return pago guardado con ID generado
+     */
     public Payment save(Payment payment) {
         return repository.save(payment);
     }
 
+    /**
+     * Actualiza un pago existente.
+     *
+     * @param id      identificador del pago
+     * @param updated datos actualizados
+     * @return Optional con el pago actualizado, o vacío si no existe
+     */
     public Optional<Payment> update(Long id, Payment updated) {
         return repository.findById(id).map(existing -> {
             existing.setOrderId(updated.getOrderId());
@@ -41,6 +65,12 @@ public class PaymentService {
         });
     }
 
+    /**
+     * Elimina un pago por su ID.
+     *
+     * @param id identificador del pago
+     * @return true si fue eliminado, false si no existía
+     */
     public boolean delete(Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);

@@ -19,22 +19,52 @@ public class ShipmentService {
         this.repository = repository;
     }
 
+    /**
+     * Retorna todos los envíos registrados.
+     *
+     * @return lista de envíos
+     */
     public List<Shipment> findAll() {
         return repository.findAll();
     }
 
+    /**
+     * Busca un envío por su ID.
+     *
+     * @param id identificador del envío
+     * @return Optional con el envío si existe
+     */
     public Optional<Shipment> findById(Long id) {
         return repository.findById(id);
     }
 
+    /**
+     * Retorna todos los envíos asociados a una orden.
+     *
+     * @param orderId identificador de la orden
+     * @return lista de envíos de la orden
+     */
     public List<Shipment> findByOrderId(Long orderId) {
         return repository.findByOrderId(orderId);
     }
 
+    /**
+     * Registra un nuevo envío.
+     *
+     * @param shipment datos del envío (orderId, address, status, carrier)
+     * @return envío guardado con ID generado
+     */
     public Shipment save(Shipment shipment) {
         return repository.save(shipment);
     }
 
+    /**
+     * Actualiza dirección, estado y transportista de un envío.
+     *
+     * @param id      identificador del envío
+     * @param updated datos actualizados
+     * @return Optional con el envío actualizado, o vacío si no existe
+     */
     public Optional<Shipment> update(Long id, Shipment updated) {
         return repository.findById(id).map(existing -> {
             existing.setAddress(updated.getAddress());
@@ -44,6 +74,12 @@ public class ShipmentService {
         });
     }
 
+    /**
+     * Elimina un envío por su ID.
+     *
+     * @param id identificador del envío
+     * @return true si fue eliminado, false si no existía
+     */
     public boolean delete(Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);

@@ -18,19 +18,33 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder; 
 
-    public List<User> findAll() { 
-        return userRepository.findAll(); 
+    /**
+     * Retorna todos los usuarios registrados.
+     *
+     * @return lista de usuarios
+     */
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
+    /**
+     * Persiste un nuevo usuario aplicando hash BCrypt a su contraseña.
+     *
+     * @param user datos del usuario (email, password, nombre)
+     * @return usuario guardado con contraseña hasheada e ID generado
+     */
     public User save(User user) {
-
         String passwordHasheada = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordHasheada);
-        
         return userRepository.save(user);
     }
 
-    public void delete(Long id) { 
-        userRepository.deleteById(id); 
+    /**
+     * Elimina un usuario por su ID.
+     *
+     * @param id identificador del usuario
+     */
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }

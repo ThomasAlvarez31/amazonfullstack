@@ -21,11 +21,22 @@ public class PaymentController {
         this.service = service;
     }
 
+    /**
+     * Retorna todos los pagos registrados.
+     *
+     * @return lista de pagos
+     */
     @GetMapping
     public List<Payment> getAll() {
         return service.findAll();
     }
 
+    /**
+     * Busca un pago por su ID.
+     *
+     * @param id identificador del pago
+     * @return 200 con el pago, o 404 si no existe
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Payment> getById(@PathVariable Long id) {
         return service.findById(id)
@@ -33,11 +44,24 @@ public class PaymentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Registra un nuevo pago.
+     *
+     * @param payment datos del pago
+     * @return pago creado con ID generado
+     */
     @PostMapping
     public Payment create(@RequestBody Payment payment) {
         return service.save(payment);
     }
 
+    /**
+     * Actualiza un pago existente.
+     *
+     * @param id      identificador del pago
+     * @param payment datos actualizados
+     * @return 200 con pago actualizado, o 404 si no existe
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Payment> update(@PathVariable Long id, @RequestBody Payment payment) {
         return service.update(id, payment)
@@ -45,6 +69,12 @@ public class PaymentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Elimina un pago por su ID.
+     *
+     * @param id identificador del pago
+     * @return 204 si fue eliminado, o 404 si no existe
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (service.delete(id)) {

@@ -21,22 +21,47 @@ public class WishlistController {
         this.service = service;
     }
 
+    /**
+     * Retorna la lista de deseos de un usuario.
+     *
+     * @param userId identificador del usuario
+     * @return lista de ítems deseados
+     */
     @GetMapping("/{userId}")
     public List<WishlistItem> findByUserId(@PathVariable Long userId) {
         return service.findByUserId(userId);
     }
 
+    /**
+     * Agrega un producto a la lista de deseos.
+     *
+     * @param item ítem con userId y productId
+     * @return ítem creado con ID generado
+     */
     @PostMapping
     public WishlistItem save(@RequestBody WishlistItem item) {
         return service.save(item);
     }
 
+    /**
+     * Elimina un ítem de la lista de deseos por su ID.
+     *
+     * @param id identificador del ítem
+     * @return 204 si fue eliminado, o 404 si no existe
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (service.delete(id)) return ResponseEntity.noContent().build();
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Elimina un producto específico de la lista de deseos de un usuario.
+     *
+     * @param userId    identificador del usuario
+     * @param productId identificador del producto
+     * @return 204 sin contenido
+     */
     @DeleteMapping("/user/{userId}/product/{productId}")
     public ResponseEntity<Void> deleteByUserAndProduct(@PathVariable Long userId,
                                                        @PathVariable Long productId) {

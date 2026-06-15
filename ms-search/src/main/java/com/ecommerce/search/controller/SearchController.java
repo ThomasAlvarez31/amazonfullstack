@@ -21,6 +21,12 @@ public class SearchController {
         this.service = service;
     }
 
+    /**
+     * Busca productos por palabra clave. Sin keyword retorna todos los resultados.
+     *
+     * @param keyword término de búsqueda (opcional)
+     * @return lista de productos coincidentes
+     */
     @GetMapping
     public List<SearchResult> search(@RequestParam(required = false) String keyword) {
         if (keyword != null && !keyword.isBlank()) {
@@ -29,16 +35,34 @@ public class SearchController {
         return service.findAll();
     }
 
+    /**
+     * Filtra productos por categoría.
+     *
+     * @param category nombre de la categoría
+     * @return lista de productos de la categoría
+     */
     @GetMapping("/category/{category}")
     public List<SearchResult> findByCategory(@PathVariable String category) {
         return service.findByCategory(category);
     }
 
+    /**
+     * Indexa un nuevo producto para búsqueda.
+     *
+     * @param result datos del producto a indexar
+     * @return resultado creado con ID generado
+     */
     @PostMapping
     public SearchResult save(@RequestBody SearchResult result) {
         return service.save(result);
     }
 
+    /**
+     * Elimina un producto del índice de búsqueda.
+     *
+     * @param id identificador del resultado
+     * @return 204 si fue eliminado, o 404 si no existe
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (service.delete(id)) return ResponseEntity.noContent().build();

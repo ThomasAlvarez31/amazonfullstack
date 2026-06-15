@@ -25,6 +25,13 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Registra un nuevo usuario, hashea su contraseña con BCrypt y retorna un JWT.
+     *
+     * @param user datos del usuario (email, password)
+     * @return mapa con {@code token} JWT y {@code role} asignado
+     * @throws RuntimeException si el correo ya está registrado
+     */
     public Map<String, String> register(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("El correo ya esta registrado");
@@ -36,6 +43,14 @@ public class AuthService {
         return Map.of("token", token, "role", "USER");
     }
 
+    /**
+     * Autentica un usuario por email y contraseña y retorna un JWT firmado.
+     *
+     * @param email    correo del usuario
+     * @param password contraseña en texto plano
+     * @return mapa con {@code token} JWT y {@code role} del usuario
+     * @throws RuntimeException si el usuario no existe o las credenciales son inválidas
+     */
     public Map<String, String> login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

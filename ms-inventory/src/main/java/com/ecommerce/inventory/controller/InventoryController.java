@@ -21,11 +21,22 @@ public class InventoryController {
         this.service = service;
     }
 
+    /**
+     * Retorna todos los registros de inventario.
+     *
+     * @return lista de entradas de inventario
+     */
     @GetMapping
     public List<Inventory> getAll() {
         return service.findAll();
     }
 
+    /**
+     * Busca un registro de inventario por su ID.
+     *
+     * @param id identificador del registro
+     * @return 200 con el registro, o 404 si no existe
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Inventory> getById(@PathVariable Long id) {
         return service.findById(id)
@@ -33,11 +44,24 @@ public class InventoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Crea un nuevo registro de inventario.
+     *
+     * @param inventory datos del inventario
+     * @return registro creado con ID generado
+     */
     @PostMapping
     public Inventory create(@RequestBody Inventory inventory) {
         return service.save(inventory);
     }
 
+    /**
+     * Actualiza un registro de inventario existente.
+     *
+     * @param id        identificador del registro
+     * @param inventory datos actualizados
+     * @return 200 con registro actualizado, o 404 si no existe
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Inventory> update(@PathVariable Long id, @RequestBody Inventory inventory) {
         return service.update(id, inventory)
@@ -45,6 +69,12 @@ public class InventoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Elimina un registro de inventario.
+     *
+     * @param id identificador del registro
+     * @return 204 si fue eliminado, o 404 si no existe
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (service.delete(id)) {
