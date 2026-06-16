@@ -5,13 +5,10 @@ import com.ecommerce.notifications.event.OrderCreatedEvent;
 import com.ecommerce.notifications.model.Notification;
 import com.ecommerce.notifications.service.NotificationService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
-
 /**
  * Consumidor RabbitMQ que recibe eventos de órdenes creadas desde ms-orders
  * y genera una notificación persistida en base de datos.
  */
-@Component
 public class OrderEventConsumer {
 
     private final NotificationService notificationService;
