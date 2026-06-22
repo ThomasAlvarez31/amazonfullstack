@@ -32,6 +32,15 @@ jobs:
         run: |
           kubectl apply -f k8s/namespace.yaml
 
+      - name: Instalar metrics-server (requerido por HPA)
+        run: |
+          kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+          if ! kubectl get deployment metrics-server -n kube-system -o jsonpath='{.spec.template.spec.containers[0].args}' | grep -q kubelet-insecure-tls; then
+            kubectl patch deployment metrics-server -n kube-system --type=json \
+              -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+          fi
+          kubectl rollout status deployment/metrics-server -n kube-system --timeout=120s
+
       - name: Crear secret amazon-secrets
         run: |
           kubectl create secret generic amazon-secrets \
@@ -58,6 +67,13 @@ jobs:
           kubectl rollout status deployment/front-end -n amazon --timeout=180s
           kubectl get pods -n amazon
           kubectl get svc -n amazon
+
+      - name: Verificar Autoscaling (HPA)
+        run: |
+          kubectl get hpa -n amazon
+          echo "--- métricas de pods (puede tardar ~1 min en poblarse) ---"
+          sleep 30
+          kubectl top pods -n amazon || true
 
       - name: DNS del frontend y gateway
         run: |
