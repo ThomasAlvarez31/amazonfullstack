@@ -1,58 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Amazon.cl</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-
-  <div id="navbar"></div>
-
-  <section class="hero">
-    <div class="hero__slides">
-      <div class="hero__slide hero__slide--1">
-        <div class="hero__content">
-          <h2>Ofertas del día</h2>
-          <p>Los mejores precios en electrónica, ropa y más</p>
-          <a href="products.html">Ver ofertas</a>
-        </div>
-      </div>
-      <div class="hero__slide hero__slide--2">
-        <div class="hero__content">
-          <h2>Envío gratis con Prime</h2>
-          <p>Millones de productos con entrega rápida</p>
-          <a href="products.html">Comprar ahora</a>
-        </div>
-      </div>
-      <div class="hero__slide hero__slide--3">
-        <div class="hero__content">
-          <h2>Nuevos ingresos</h2>
-          <p>Descubre los productos más recientes</p>
-          <a href="products.html">Explorar</a>
-        </div>
-      </div>
-    </div>
-    <button class="hero__btn hero__btn--prev">&#8249;</button>
-    <button class="hero__btn hero__btn--next">&#8250;</button>
-    <div class="hero__dots">
-      <button class="hero__dot active"></button>
-      <button class="hero__dot"></button>
-      <button class="hero__dot"></button>
-    </div>
-  </section>
-
-  <div class="container">
-    <h2 class="section-title">Compra por categoría</h2>
-    <div class="categories" id="category-grid"></div>
-
-    <h2 class="section-title">Productos destacados</h2>
-    <div class="products-grid" id="products-grid"></div>
-  </div>
-
-  <div id="footer"></div>
-
-  <script type="module" src="js/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon.cl</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

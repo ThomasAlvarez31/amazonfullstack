@@ -1,17 +1,14 @@
-FROM node:18-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
+RUN npm install -g npm@latest
 COPY package.json package-lock.json ./
-RUN npm ci --only=dev
-COPY tsconfig.json .
-COPY ts ./ts
-RUN npx tsc
+RUN npm ci
+COPY . .
+RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:stable-alpine
-COPY --from=build /app/js /usr/share/nginx/html/js
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY *.html /usr/share/nginx/html/
-COPY css /usr/share/nginx/html/css
-COPY assets /usr/share/nginx/html/assets
 USER nginx
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

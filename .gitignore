@@ -12,6 +12,8 @@ target/
 # Node
 node_modules/
 front-end/node_modules/
+front-end/dist/
+front-end/coverage/
 
 # OS
 .DS_Store
@@ -33,3 +35,10 @@ BORRADOR_*.md
 # Postman
 .postman/
 postman/
+
+# Documentacion local de estudio (no subir)
+docs/frontend-react-vite-springboot.md
+
+# Claves privadas AWS
+PEM/
+*.pem
