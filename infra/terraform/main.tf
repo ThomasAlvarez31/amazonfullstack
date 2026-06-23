@@ -103,6 +103,15 @@ resource "aws_security_group" "data" {
     security_groups = [aws_security_group.app.id]
   }
 
+  # Trafico real de los microservicios viene de los nodos EKS (arquitectura
+  # post-migracion), no de las instancias EC2 app1/app2 (legacy, sg.app).
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.eks_nodes.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -251,6 +260,10 @@ resource "aws_eks_cluster" "main" {
     ]
     endpoint_public_access  = true
     endpoint_private_access = true
+  }
+
+  lifecycle {
+    ignore_changes = [bootstrap_self_managed_addons]
   }
 }
 
