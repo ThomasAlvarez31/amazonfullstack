@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+# AMI base es Amazon Linux 2 (usa yum, no dnf)
+yum update -y -q
+amazon-linux-extras install docker -y -q || yum install -y docker -q
+yum install -y git -q
+systemctl enable docker
+systemctl start docker
+usermod -aG docker ec2-user
+
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -sSL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
+  -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+mkdir -p /home/ec2-user/amazonfullstack
+chown -R ec2-user:ec2-user /home/ec2-user/amazonfullstack
+
+sudo -u ec2-user bash -lc '
+  if [ ! -d /home/ec2-user/amazonfullstack/.git ]; then
+    git clone --branch ${deploy_branch} https://github.com/${github_repo}.git /home/ec2-user/amazonfullstack
+  else
+    cd /home/ec2-user/amazonfullstack
+    git fetch origin ${deploy_branch}
+    git checkout ${deploy_branch}
+    git pull --ff-only origin ${deploy_branch}
+  fi
+'
